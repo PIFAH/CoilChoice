@@ -101,14 +101,22 @@ function computeFromModel(model) {
 function renderAsHTML(model) {
     var result = "";
     result += "<table>\n";
+    result += "<tr>\n";
     result += "<td>\n";
-    result += "<tr>\n";
     result += "CoilHeat (Watts): ";
+    result += "</td>\n";
+    result += "<td>\n";
+    result += model.CoilHeat;
+    result += "</td>\n";
     result += "</tr>\n";
     result += "<tr>\n";
-    result += model.CoilHeat;
-    result += "</tr>\n";
+    result += "<td>\n";
+    result += "Effective MMF (Ampere Turns): ";
     result += "</td>\n";
+    result += "<td>\n";
+    result += model.EffectiveMMF;
+    result += "</td>\n";
+    result += "</tr>\n";
     result += "</table>\n";
     return result;
 }

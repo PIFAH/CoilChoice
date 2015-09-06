@@ -41,29 +41,33 @@
 
 var amperage_graph = null;
 var coilheat_graph = null;
-var models = [];
+var amperage_models = [];
+var coilheat_models = [];
 
-var data = null;
+var amperage_data = null;
+var coilheat_data = null;
 
-function find_in_data(x,y,z) {
+function find_in_models(ms,x,y,z) {
    var result = null;
    var q = [];
-   for(var i = 0; i < models.length; i++) {
-      var d = models[i];
+   for(var i = 0; i < ms.length; i++) {
+      var d = ms[i];
       if ((d.x == x) && (d.y == y) && (d.z == z)) {
          result = d;
       }
 
-   } 
+   }
    return result;
 }
 
 
 function constructModel() {
 
-  data = new vis.DataSet();
+  amperage_data = new vis.DataSet();
+  coilheat_data = new vis.DataSet();
 
-  models = [];
+  amperage_models = [];
+  coilheart_models = [];
 
   var xsteps = 4;  // number of datapoints will be steps*steps
   var ysteps = 10;  // number of datapoints will be steps*steps
@@ -79,7 +83,7 @@ function constructModel() {
 
 // Our basic model is to vary x as wire guage, and y as bobbin diameter.
 // I'm trying to match data with spreadsheet....
-  var tMax = 4;
+  var tMax = 50;
 
   var internal_resistance = parseFloat($("#internalresistance").val()); 
   var bobbin_inner_diameter = parseFloat($("#bobbininnerdiameter").val()); 
@@ -101,14 +105,22 @@ function constructModel() {
 	model.MagnetDiameter = magnetdiameter;
         model.BobbinOuterDiameter = model.BobbinInnerDiameter + y*1.0;
         model.AWG = awg;
-
         var computed = computeFromModel(model);
-        var amp_limit = t * 1.0;
-	value = computed.EffectiveMMF;
-	data.add({x: x, y: y, z: value, filter: t,
-	    style: value, model: computed});
-	models.push({x:x, y:y, z: null, filter: t,
-	    style:null, model: computed});
+        var amp_limit = t * 2.0;
+	var heat_limit = t * 40;
+	var amp_value = (computed.Amperage > amp_limit) ? -1.0 : computed.EffectiveMMF  ;
+	amperage_data.add({x: x, y: y, z: amp_value, filter: t,
+	    style: amp_value, model: computed});
+
+	amperage_models.push({x:x, y:y, z: amp_value, filter: t,
+	    model: computed});
+
+	var heat_value = (computed.CoilHeat > heat_limit) ? -1.0 : computed.CoilHeat  ;
+	coilheat_data.add({x: x, y: y, z: heat_value, filter: t,
+	    style: heat_value, model: computed});
+
+	coilheat_models.push({x:x, y:y, z: heat_value, filter: t,
+	    model: computed});
       }
     }
   }
@@ -117,16 +129,6 @@ function constructModel() {
 // Called when the Visualization API is loaded.
 function drawAmperageVisualization() {
   constructModel();
-  alert("xxx"+models.length);
-/*  var data = new vis.DataSet();
-  for(var i = 0; i < models.length; i++) {
-    var d = models[i];
-    var value = (d.model.Amperage > (d.model.t * 1.0)) ? -1.0 : d.model.z;
-    data.add({x:d.x, y:d.y, z: value, filter: d.filter,
-	    style: value, model: d});
-  }
-*/
-  alert("qqq");
 
   var style = document.getElementById('style').value;
   var withValue = ['bar-color', 'bar-size', 'dot-size', 'dot-color'].indexOf(style) != -1;
@@ -144,7 +146,7 @@ function drawAmperageVisualization() {
 //tooltip: true,
    tooltip: function (point) {
 // parameter point contains properties x, y, z
-     var m = find_in_data(point.x,point.y,point.z);
+     var m = find_in_models(amperage_models,point.x,point.y,point.z);
      return renderAsHTML(m.model);
    },
    xLabel: "AWG",
@@ -177,33 +179,17 @@ function drawAmperageVisualization() {
 
 // create our graphs
   var container = document.getElementById('amperagelimitchart');
-  alert("CCC");
-  alert("CCC"+container);
-//  alert("CCC"+data);
-  amperage_graph = new vis.Graph3d(container, data, amperage_options);
+  amperage_graph = new vis.Graph3d(container, amperage_data, amperage_options);
 
   if (camera) amperage_graph.setCameraPosition(camera); // restore camera position
 
   document.getElementById('style').onchange = drawVisualization;
 
-  alert("DDD");
 }
 
 // Called when the Visualization API is loaded.
 function drawCoilHeatVisualization() {
   constructModel();
-  alert("xxx");
-
-  // Now Construct the data from the model....
-/*  var data = new vis.DataSet();
-  for(var i = 0; i < models.length; i++) {
-    var d = models[i];
-    var value = (d.model.Amperage > (d.model.t * 1.0)) ? -1.0 : d.model.z;
-    data.add({x:d.x, y:d.y, z: value, filter: d.filter,
-	    style: value, model: d});
-  }
-*/
-  alert("zzz");
 
 
   var style = document.getElementById('style').value;
@@ -221,7 +207,7 @@ function drawCoilHeatVisualization() {
 //tooltip: true,
    tooltip: function (point) {
 // parameter point contains properties x, y, z
-     var m = find_in_data(point.x,point.y,point.z);
+     var m = find_in_models(coilheat_models,point.x,point.y,point.z);
      return renderAsHTML(m.model);
    },
    xLabel: "AWG",
@@ -255,7 +241,7 @@ function drawCoilHeatVisualization() {
 // create our graphs
 
   var container = document.getElementById('coilheatlimitchart');
-  coilheat_graph = new vis.Graph3d(container, data, coilheat_options);
+  coilheat_graph = new vis.Graph3d(container, coilheat_data, coilheat_options);
 
   if (camera) coilheat_graph.setCameraPosition(camera); // restore camera position
 
