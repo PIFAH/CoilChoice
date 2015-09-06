@@ -80,6 +80,7 @@ function computeFromModel(model) {
   var EffectiveMMF = MMF_amp_turns * (Math.pow(model.MagnetDiameter,2) / Math.pow(AverageTurnDiameter,2));
 
   return {
+    Model: model,
     Windings : Windings,
     TurnsPerWinding : TurnsPerWinding,
     Turns : Turns,
@@ -98,25 +99,55 @@ function computeFromModel(model) {
   }
 }
 
-function renderAsHTML(model) {
+function renderAsHTML(m) {
     var result = "";
     result += "<table>\n";
+
+    result += "<tr>\n";
+    result += "<td>\n";
+    result += "Effective MMF (Ampere Turns) : ";
+    result += "</td>\n";
+    result += "<td>\n";
+    result += m.EffectiveMMF.toFixed(2);
+    result += "</td>\n";
+    result += "</tr>\n";
+
+    result += "<tr>\n";
+    result += "<td>\n";
+    result += "Amperage: ";
+    result += "</td>\n";
+    result += "<td>\n";
+    result += m.Amperage.toFixed(2);
+    result += "</td>\n";
+    result += "</tr>\n";
+
     result += "<tr>\n";
     result += "<td>\n";
     result += "CoilHeat (Watts): ";
     result += "</td>\n";
     result += "<td>\n";
-    result += model.CoilHeat;
+    result += m.CoilHeat.toFixed(2);
     result += "</td>\n";
     result += "</tr>\n";
+
     result += "<tr>\n";
     result += "<td>\n";
-    result += "Effective MMF (Ampere Turns): ";
+    result += "AWG: ";
     result += "</td>\n";
     result += "<td>\n";
-    result += model.EffectiveMMF;
+    result += " "+m.Model.AWG;
     result += "</td>\n";
     result += "</tr>\n";
+
+    result += "<tr>\n";
+    result += "<td>\n";
+    result += "Bobbin Outer Diameter (mm) ";
+    result += "</td>\n";
+    result += "<td>\n";
+    result += " "+m.Model.BobbinOuterDiameter.toFixed(2);
+    result += "</td>\n";
+    result += "</tr>\n";
+
     result += "</table>\n";
     return result;
 }
