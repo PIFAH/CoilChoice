@@ -45,7 +45,7 @@ var coilheat_models = [];
 var amperage_data = null;
 var coilheat_data = null;
 
-function find_in_modelsx(ms, x, y) {
+function find_in_models(ms, x, y) {
     var result = null;
     var q = [];
     for (var i = 0; i < ms.length; i++) {
@@ -81,9 +81,10 @@ function basic_options() {
     this.animationAutoStart = true;
     this.showAnimationControls = true
 };
+
 var amperage_options = new basic_options();
 amperage_options.tooltip = function(point) {
-    var m = find_in_modelsx(amperage_models, point.x, point.y);
+    var m = find_in_models(amperage_models, point.x, point.y);
     return renderAsHTML(m.model);
 };
 amperage_options.zLabel = "Effective MMF";
@@ -91,9 +92,10 @@ amperage_options.zValueLabel = function(value) {
     return value + ' Ampere-Turns';
 };
 amperage_options.filterLabel = 'Maximum Ampere Limit: ';
+
 var coilheat_options = new basic_options();
 coilheat_options.tooltip = function(point) {
-    var m = find_in_modelsx(coilheat_models, point.x, point.y);
+    var m = find_in_models(coilheat_models, point.x, point.y);
     return renderAsHTML(m.model);
 };
 coilheat_options.zLabel = "Effective MMF",
@@ -101,6 +103,91 @@ coilheat_options.zLabel = "Effective MMF",
         return value + ' Watts';
     };
 coilheat_options.filterLabel = 'Maximum Coil Wattage: ';
+
+function traverseModel(f) {
+    var xsteps = 4; // number of datapoints will be steps*steps
+    var ysteps = 10; // number of datapoints will be steps*steps
+    var xaxisMax = 7;
+    var xaxisStep = 1;
+    var yaxisMax = 10;
+    var yaxisStep = yaxisMax / ysteps;
+    // This charting system takes x and y to be the physical
+    // spatial dimensions, we we have to map these into things that 
+    // make sense in our model, since we have vastly different scales...
+    // Effectively we need a model transducer....
+    // Our basic model is to vary x as wire guage, and y as bobbin diameter.
+    // t is a the animation parameter
+    var tMax = 50;
+    for (var t = 0; t < tMax; t++) {
+        for (var x = 0; x <= xaxisMax; x += xaxisStep) {
+            for (var y = 1; y <= yaxisMax; y += yaxisStep) {
+                // Now set up the model object....
+                var awg = AWG_indexes[x]; // AWG
+                var model = new CoilModel;
+                model.Voltage = voltage;
+                model.InternalResistance = internal_resistance;
+                model.MagnetDiameter = magnetdiameter;
+                model.BobbinOuterDiameter = model.BobbinInnerDiameter + y *
+                    1.0;
+                model.AWG = awg;
+                var computed = computeFromModel(model);
+                var amp_limit = t * 2.0;
+                var heat_limit = t * 40;
+		for(var i = 0; i < f.length; i++) {
+		    f[i](computed);
+                }
+            }
+        }
+    }
+}
+
+function amperage_value(t,computed) {
+    var amp_limit = t * 2.0;
+    return (computed.Amperage > amp_limit) ? -1.0 :
+       computed.EffectiveMMF;
+}
+function coilheat_value(t,computed) {
+   var heat_limit = t * 40;
+   return (computed.CoilHeat > heat_limit) ? -1.0 :
+                   computed.CoilHeat;
+}
+
+function visit_amperage(computed,data,models,x,y,t) {
+   var amp_value = amperage_value(t,computed);
+    data.add({
+                    x: x,
+                    y: y,
+                    z: amp_value,
+                    filter: t,
+                    style: amp_value,
+                    model: computed
+                });
+    models.push({
+                    x: x,
+                    y: y,
+                    z: amp_value,
+                    filter: t,
+                    model: computed
+                });
+}
+function visit_coilheat(computed,data,models,x,y,t) {
+   var heat_value = coilheat_value(t,computed);
+   data.add({
+                    x: x,
+                    y: y,
+                    z: heat_value,
+                    filter: t,
+                    style: heat_value,
+                    model: computed
+                });
+   models.push({
+                    x: x,
+                    y: y,
+                    z: heat_value,
+                    filter: t,
+                    model: computed
+                });
+}
 
 function constructModel() {
     amperage_data = new vis.DataSet();
@@ -138,42 +225,9 @@ function constructModel() {
                     1.0;
                 model.AWG = awg;
                 var computed = computeFromModel(model);
-                var amp_limit = t * 2.0;
-                var heat_limit = t * 40;
-                var amp_value = (computed.Amperage > amp_limit) ? -1.0 :
-                    computed.EffectiveMMF;
-                amperage_data.add({
-                    x: x,
-                    y: y,
-                    z: amp_value,
-                    filter: t,
-                    style: amp_value,
-                    model: computed
-                });
-                amperage_models.push({
-                    x: x,
-                    y: y,
-                    z: amp_value,
-                    filter: t,
-                    model: computed
-                });
-                var heat_value = (computed.CoilHeat > heat_limit) ? -1.0 :
-                    computed.CoilHeat;
-                coilheat_data.add({
-                    x: x,
-                    y: y,
-                    z: heat_value,
-                    filter: t,
-                    style: heat_value,
-                    model: computed
-                });
-                coilheat_models.push({
-                    x: x,
-                    y: y,
-                    z: heat_value,
-                    filter: t,
-                    model: computed
-                });
+
+                visit_coilheat(computed,coilheat_data,coilheat_models,x,y,t);
+                visit_amperage(computed,amperage_data,amperage_models,x,y,t);
             }
         }
     }
