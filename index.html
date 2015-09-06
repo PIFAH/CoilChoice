@@ -47,6 +47,70 @@ var coilheat_models = [];
 var amperage_data = null;
 var coilheat_data = null;
 
+function basic_options() {
+    this.width=  '600px';
+    this.height= '600px';
+    this.style= 'bar-color';
+    this.showPerspective= true;
+    this.showGrid= true;
+    this.showShadow= true;
+
+   this.tooltip= function (point) {
+     var m = find_in_models(amperage_models,point.x,point.y,point.z);
+     return renderAsHTML(m.model);
+   };
+   this.xLabel= "AWG";
+   this.yLabel= "Coil Width";
+   this.zLabel= "Effective MMF";
+   this.xValueLabel= function(value) {
+     return AWG_indexes[value];
+   };
+       
+   this.yValueLabel= function(value) {
+     return value + 'mm';
+   };
+
+   this.zValueLabel= function(value) {
+     return value +' Ampere-Turns';
+   };
+   this.filterLabel= 'Maximum Ampere Limit: ';
+
+    this.keepAspectRatio= true;
+    this.verticalRatio= 0.5;
+    this.animationInterval= 1000; // milliseconds
+    this.animationPreload= true;
+    // This may be annoying, but alerts the use to the fact 
+    // that it is an interactive model.
+    this.animationAutoStart= true;
+    this.showAnimationControls= true
+  };
+
+  var amperage_options = new basic_options();
+
+  amperage_options.tooltip =  function (point) {
+     var m = find_in_models(amperage_models,point.x,point.y,point.z);
+     return renderAsHTML(m.model);
+   };
+   amperage_options.zLabel = "Effective MMF",
+
+   amperage_options.zValueLabel = function(value) {
+     return value +' Ampere-Turns';
+   };
+   amperage_options.filterLabel = 'Maximum Ampere Limit: ';
+
+  var coilheat_options = new basic_options();
+
+  coilheat_options.tooltip = function (point) {
+     var m = find_in_models(coilheat_models,point.x,point.y,point.z);
+     return renderAsHTML(m.model);
+   },
+   coilheat_options.zLabel = "Effective MMF",
+
+   coilheat_options.zValueLabel = function(value) {
+     return value +' Watts';
+   },
+   coilheat_options.filterLabel = 'Maximum Coil Wattage: ',
+
 function find_in_models(ms,x,y,z) {
    var result = null;
    var q = [];
@@ -82,7 +146,7 @@ function constructModel() {
 // Effectively we need a model transducer....
 
 // Our basic model is to vary x as wire guage, and y as bobbin diameter.
-// I'm trying to match data with spreadsheet....
+// t is a the animation parameter
   var tMax = 50;
 
   var internal_resistance = parseFloat($("#internalresistance").val()); 
@@ -126,6 +190,7 @@ function constructModel() {
   }
 }
 
+
 // Called when the Visualization API is loaded.
 function drawAmperageVisualization() {
   constructModel();
@@ -134,46 +199,6 @@ function drawAmperageVisualization() {
   var withValue = ['bar-color', 'bar-size', 'dot-size', 'dot-color'].indexOf(style) != -1;
 
 // specify options
-  var amperage_options = {
-    width:  '600px',
-    height: '600px',
-    style: style,
-    showPerspective: true,
-    showGrid: true,
-    showShadow: true,
-
-// Option tooltip can be true, false, or a function returning a string with HTML contents
-//tooltip: true,
-   tooltip: function (point) {
-// parameter point contains properties x, y, z
-     var m = find_in_models(amperage_models,point.x,point.y,point.z);
-     return renderAsHTML(m.model);
-   },
-   xLabel: "AWG",
-   yLabel: "Coil Width",
-   zLabel: "Effective MMF",
-   xValueLabel: function(value) {
-     return AWG_indexes[value];
-   },
-       
-   yValueLabel: function(value) {
-     return value + 'mm';
-   },
-
-   zValueLabel: function(value) {
-     return value +' Ampere-Turns';
-   },
-   filterLabel: 'Maximum Ampere Limit: ',
-
-    keepAspectRatio: true,
-    verticalRatio: 0.5,
-    animationInterval: 1000, // milliseconds
-    animationPreload: true,
-    // This may be annoying, but alerts the use to the fact 
-    // that it is an interactive model.
-    animationAutoStart: true,
-    showAnimationControls: true
-  };
 
   var camera = amperage_graph ? amperage_graph.getCameraPosition() : null;
 
@@ -195,46 +220,6 @@ function drawCoilHeatVisualization() {
   var style = document.getElementById('style').value;
   var withValue = ['bar-color', 'bar-size', 'dot-size', 'dot-color'].indexOf(style) != -1;
 
-  var coilheat_options = {
-    width:  '600px',
-    height: '600px',
-    style: style,
-    showPerspective: true,
-    showGrid: true,
-    showShadow: true,
-
-// Option tooltip can be true, false, or a function returning a string with HTML contents
-//tooltip: true,
-   tooltip: function (point) {
-// parameter point contains properties x, y, z
-     var m = find_in_models(coilheat_models,point.x,point.y,point.z);
-     return renderAsHTML(m.model);
-   },
-   xLabel: "AWG",
-   yLabel: "Coil Width",
-   zLabel: "Effective MMF",
-   xValueLabel: function(value) {
-     return AWG_indexes[value];
-   },
-       
-   yValueLabel: function(value) {
-     return value + 'mm';
-   },
-
-   zValueLabel: function(value) {
-     return value +' Watts';
-   },
-   filterLabel: 'Maximum Coil Wattage: ',
-
-    keepAspectRatio: true,
-    verticalRatio: 0.5,
-    animationInterval: 1000, // milliseconds
-    animationPreload: true,
-    // This may be annoying, but alerts the use to the fact 
-    // that it is an interactive model.
-    animationAutoStart: true,
-    showAnimationControls: true
-  };
 
   var camera = coilheat_graph ? coilheat_graph.getCameraPosition() : null;
 
