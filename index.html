@@ -15,400 +15,382 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
+  -->
 <html lang="en">
-    <head>
-		<meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        <title>A Model of Technical Debt</title>
-        <meta name="description" content="A Model of Technical Debt" />
-        <meta name="keywords" content="d3.js, area charts, zoom, pan, data, infographic, ajavscript, chart" />
-        <link rel="shortcut icon" href="../favicon.ico"> 
-        <link rel="stylesheet" type="text/css" href="css/style.css" />
-		<link href='http://fonts.googleapis.com/css?family=Lato:300,700' rel='stylesheet' type='text/css' />
-		<script type="text/javascript" src="js/modernizr.custom.79639.js"></script> 
-		<!--[if lte IE 8]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->	
-		<script src="http://d3js.org/d3.v2.js"></script>
- <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
-    </head>
-    <body>
-<div class="container">
-  <section class="main">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Coil Choice</title>
+    <meta name="description" content="A Model of Electromagnetic Coils" />
+    <meta name="keywords" content="d3.js, area charts, zoom, pan,
+				   data, infographic, ajavscript, chart, coil, magneto-motive force,
+				   MMF, AWG" />
+    <link rel="shortcut icon" href="../favicon.ico"> 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="vis/dist/vis.js"></script>
+    <script src="CoilModel.js"></script>
+   <!-- Bootstrap core CSS -->
+    <link href="bootstrap-3.3.5-dist//css/bootstrap.min.css" rel="stylesheet">
 
- <div id="chart-container">
-  <h1>A Model of Technical Debt</h1>
-  <h3>Adjust % of Annual Investment Going to Paydown Technical Debt
-  vs. Producing Value</h2>
-<p id="target">
-   30%
-</p>
-<div id="investments">
-<div id="inv_scale">
-<div id="highnumber">
-100%
-</div>
-<div id="midnumber">
-50%
-</div>
-<div id="lownumber">
-0%
-</div>
-</div>
-</div>
+ 
+<script type="text/javascript">
 
-</section>
+var amperage_graph = null;
+var coilheat_graph = null;
+var models = [];
 
-  
-  
+var data = null;
 
-<section>
+function find_in_data(x,y,z) {
+   var result = null;
+   var q = [];
+   for(var i = 0; i < models.length; i++) {
+      var d = models[i];
+      if ((d.x == x) && (d.y == y) && (d.z == z)) {
+         result = d;
+      }
 
-<div id="modelinfo">
-<h2>A Basic Financial Model</h2>
-<p>Initial Year: 2010</p>
-<p>Number of Years: 10</p>
-<p>Basic maintenace costs per year: $2000 (in thousands!)</p>
-<p>Assumed Return-on-Investment in Government Bucks per Dollar input with no Technical Debt: 3.0</p>
-<p>Sliders control each year investment between $0 and $4,000 (in thousands)<p>
-</div>
-
-</section>
-
-<section>
-
-<div id="thanks">
-<h2>Thanks</h2>
-<p>
-  This model is implemented with D3 starting from code (<a href="http://tympanus.net/codrops/2012/08/29/multiple-area-charts-with-d3-js/">http://tympanus.net/codrops/2012/08/29/multiple-area-charts-with-d3-js/</a>)
-  published by Tyler Craft on CoDrops.  
-</p>
-<p>
-We thank Tyler Craft
-  starting point and CoDrops for publishing with a license that
-  allows us to reuse their work: <a href="http://tympanus.net/codrops/licensing/">http://tympanus.net/codrops/licensing/</a>
-</p>
-<p>
-The design of this page was greatly improved by Michelle Hertzfeld.
-</p>
-</div>
-</section>
-</div>
-
-</body>
-  <script type="text/javascript">
-    var margin = {top: 10, right: 40, bottom: 150, left: 60},
-width = 940 - margin.left - margin.right,
-height = 500 - margin.top - margin.bottom,
-contextHeight = 50;
-contextWidth = width * .5;
-
-var svg = d3.select("#chart-container").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", (height + margin.top + margin.bottom));
-
-    var initial_year = 2010;
-    var num_years = 10;
-    var maintenance_per_year = 2000.0;
-    var target_percentage= 0.30;
-    $( document ).ready(function() {
-      $("#target").text("Target Technical Debt Percentage: " + 100*target_percentage + "%");
-    });
-
-    var investments = [];
-    var td_investments = [];
-    var ROI_Assumption = 3.0;
-    var Technical_Debt_Interest= 0.1;
-    var annual_investment = 4000.0;
-
-    for(var i = 0; i < num_years; i++) {
-//investments[i] = maintenance_per_year*(num_years - i)/num_years ;
-        investments[i] = annual_investment;
-	td_investments[i] = (100.0 *( target_percentage - 0.05));
-    }
-
-function ConstructSlider(key,initial)
-{
-  return '<span><span class="invtitle">'+(initial_year+key)+'</span><span class="invclass" id="invyear'+key+'">'+initial+'"</span></span>';
+   } 
+   return result;
 }
 
-  function ConstructSlider2(key,initial)
-{
-  return '<span><span class="invtitle">'+(initial_year+key)+'</span><span class="invclass" id="invyeartd'+key+'">'+initial+'"</span></span>';
+
+function constructModel() {
+
+  data = new vis.DataSet();
+
+  models = [];
+
+  var xsteps = 4;  // number of datapoints will be steps*steps
+  var ysteps = 10;  // number of datapoints will be steps*steps
+  var xaxisMax = 7;
+  var xaxisStep = 1;
+  var yaxisMax = 10;
+  var yaxisStep = yaxisMax / ysteps;
+
+// This charting system takes x and y to be the physical
+// spatial dimensions, we we have to map these into things that 
+// make sense in our model, since we have vastly different scales...
+// Effectively we need a model transducer....
+
+// Our basic model is to vary x as wire guage, and y as bobbin diameter.
+// I'm trying to match data with spreadsheet....
+  var tMax = 4;
+
+  var internal_resistance = parseFloat($("#internalresistance").val()); 
+  var bobbin_inner_diameter = parseFloat($("#bobbininnerdiameter").val()); 
+  var bobbin_length = parseFloat($("#bobbinlength").val()); 
+  var voltage = parseFloat($("#voltage").val()); 
+  var magnetdiameter = parseFloat($("#magnetdiameter").val()); 
+
+
+  for (var t = 0; t < tMax; t++) {
+    for (var x = 0; x <= xaxisMax; x+=xaxisStep) {
+      for (var y = 1; y <= yaxisMax; y+=yaxisStep) { 
+
+// Now set up the model object....
+        var awg = AWG_indexes[x]; // AWG
+	var model = new CoilModel;
+        model.Voltage = voltage;
+        model.InternalResistance = internal_resistance;
+
+	model.MagnetDiameter = magnetdiameter;
+        model.BobbinOuterDiameter = model.BobbinInnerDiameter + y*1.0;
+        model.AWG = awg;
+
+        var computed = computeFromModel(model);
+        var amp_limit = t * 1.0;
+	value = computed.EffectiveMMF;
+	data.add({x: x, y: y, z: value, filter: t,
+	    style: value, model: computed});
+	models.push({x:x, y:y, z: null, filter: t,
+	    style:null, model: computed});
+      }
+    }
+  }
 }
 
-$(function() {
-
-    // setup graphic sliders
-    for(var i = 0; i < num_years; i++) {
-//        $( "#investments" ).append( ConstructSlider(i,investments[i]) );
-        $( "#investments" ).append( ConstructSlider2(i,td_investments[i]) );	
-    }
-
-var handle = null;
-var ageInput = $("#ageInput");
-var ageDisplay = $("#ageInput > div");
-
-    var k = 0;
-    for(var i = 0; i < num_years; i++) {
-	var td_ele = $("#invyeartd"+i)
-	    // read initial values from markup and remove that
-	    var value = parseInt( $( td_ele ).text(), 10 );
-	    $( td_ele ).empty().slider({
-		value: value,
-		range: "min",
-		max: 100.0,
-		animate: true,
-		orientation: "vertical",
-		change: function(event, ui) {
-		    var str = event.target.id;
-		    var i = parseInt(str.slice(9,str.length));
-		    td_investments[i]= ui.value;
-
-		    var obj = d3.select("#chart-container").select("svg").remove();
-		    svg = d3.select("#chart-container").append("svg")
-			.attr("width", width + margin.left + margin.right)
-			.attr("height", (height + margin.top + margin.bottom));
-		    createChart(RobsModelOfTechnicalDebt());
-		} 
-	});
-//        td_ele.css('background', 'rgb(200,100,100)');
-
-/*	var ele = $("#invyear"+i)
-	    // read initial values from markup and remove that
-	    var value = parseInt( $( ele ).text(), 10 );
-	    $( ele ).empty().slider({
-		value: value,
-		range: "min",
-		max: 2000.0*2.0,
-		animate: true,
-		orientation: "vertical",
-		change: function(event, ui) { 
-		    var str = event.target.id;
-		    var i = parseInt(str.slice(7,str.length));
-		    investments[i] = ui.value;
-
-		    var obj = d3.select("#chart-container").select("svg").remove();
-		    svg = d3.select("#chart-container").append("svg")
-			.attr("width", width + margin.left + margin.right)
-			.attr("height", (height + margin.top + margin.bottom));
-		    createChart(RobsModelOfTechnicalDebt());
-		} 
-	});
+// Called when the Visualization API is loaded.
+function drawAmperageVisualization() {
+  constructModel();
+  alert("xxx"+models.length);
+/*  var data = new vis.DataSet();
+  for(var i = 0; i < models.length; i++) {
+    var d = models[i];
+    var value = (d.model.Amperage > (d.model.t * 1.0)) ? -1.0 : d.model.z;
+    data.add({x:d.x, y:d.y, z: value, filter: d.filter,
+	    style: value, model: d});
+  }
 */
-//        ele.css('background', 'rgb(100,200,100)');
-    }
-});
+  alert("qqq");
 
-function RobsModelOfTechnicalDebt()
+  var style = document.getElementById('style').value;
+  var withValue = ['bar-color', 'bar-size', 'dot-size', 'dot-color'].indexOf(style) != -1;
+
+// specify options
+  var amperage_options = {
+    width:  '600px',
+    height: '600px',
+    style: style,
+    showPerspective: true,
+    showGrid: true,
+    showShadow: true,
+
+// Option tooltip can be true, false, or a function returning a string with HTML contents
+//tooltip: true,
+   tooltip: function (point) {
+// parameter point contains properties x, y, z
+     var m = find_in_data(point.x,point.y,point.z);
+     return renderAsHTML(m.model);
+   },
+   xLabel: "AWG",
+   yLabel: "Coil Width",
+   zLabel: "Effective MMF",
+   xValueLabel: function(value) {
+     return AWG_indexes[value];
+   },
+       
+   yValueLabel: function(value) {
+     return value + 'mm';
+   },
+
+   zValueLabel: function(value) {
+     return value +' Ampere-Turns';
+   },
+   filterLabel: 'Maximum Ampere Limit: ',
+
+    keepAspectRatio: true,
+    verticalRatio: 0.5,
+    animationInterval: 1000, // milliseconds
+    animationPreload: true,
+    // This may be annoying, but alerts the use to the fact 
+    // that it is an interactive model.
+    animationAutoStart: true,
+    showAnimationControls: true
+  };
+
+  var camera = amperage_graph ? amperage_graph.getCameraPosition() : null;
+
+// create our graphs
+  var container = document.getElementById('amperagelimitchart');
+  alert("CCC");
+  alert("CCC"+container);
+//  alert("CCC"+data);
+  amperage_graph = new vis.Graph3d(container, data, amperage_options);
+
+  if (camera) amperage_graph.setCameraPosition(camera); // restore camera position
+
+  document.getElementById('style').onchange = drawVisualization;
+
+  alert("DDD");
+}
+
+// Called when the Visualization API is loaded.
+function drawCoilHeatVisualization() {
+  constructModel();
+  alert("xxx");
+
+  // Now Construct the data from the model....
+/*  var data = new vis.DataSet();
+  for(var i = 0; i < models.length; i++) {
+    var d = models[i];
+    var value = (d.model.Amperage > (d.model.t * 1.0)) ? -1.0 : d.model.z;
+    data.add({x:d.x, y:d.y, z: value, filter: d.filter,
+	    style: value, model: d});
+  }
+*/
+  alert("zzz");
+
+
+  var style = document.getElementById('style').value;
+  var withValue = ['bar-color', 'bar-size', 'dot-size', 'dot-color'].indexOf(style) != -1;
+
+  var coilheat_options = {
+    width:  '600px',
+    height: '600px',
+    style: style,
+    showPerspective: true,
+    showGrid: true,
+    showShadow: true,
+
+// Option tooltip can be true, false, or a function returning a string with HTML contents
+//tooltip: true,
+   tooltip: function (point) {
+// parameter point contains properties x, y, z
+     var m = find_in_data(point.x,point.y,point.z);
+     return renderAsHTML(m.model);
+   },
+   xLabel: "AWG",
+   yLabel: "Coil Width",
+   zLabel: "Effective MMF",
+   xValueLabel: function(value) {
+     return AWG_indexes[value];
+   },
+       
+   yValueLabel: function(value) {
+     return value + 'mm';
+   },
+
+   zValueLabel: function(value) {
+     return value +' Watts';
+   },
+   filterLabel: 'Maximum Coil Wattage: ',
+
+    keepAspectRatio: true,
+    verticalRatio: 0.5,
+    animationInterval: 1000, // milliseconds
+    animationPreload: true,
+    // This may be annoying, but alerts the use to the fact 
+    // that it is an interactive model.
+    animationAutoStart: true,
+    showAnimationControls: true
+  };
+
+  var camera = coilheat_graph ? coilheat_graph.getCameraPosition() : null;
+
+// create our graphs
+
+  var container = document.getElementById('coilheatlimitchart');
+  coilheat_graph = new vis.Graph3d(container, data, coilheat_options);
+
+  if (camera) coilheat_graph.setCameraPosition(camera); // restore camera position
+
+  document.getElementById('style').onchange = drawVisualization;
+
+}
+
+function drawVisualization()
 {
-    var cur_td = 0.0;
-    var roi = 1.0;
-
-
-    var technical_debt_value_limit= 6000.0;
-    var maintenance_per_year = target_percentage * annual_investment;
-    var rdata = [];
-    var current_output = 0.0;
-    var i = 0;
-    for(i = 0; i < num_years; i++) {
-        var fraction_paydown = td_investments[i]/100.0;
-        var fraction_value = (1.0 - fraction_paydown);
-	var current_value = investments[i]*fraction_value;
-	var current_paydown = maintenance_per_year + -investments[i]*fraction_paydown;
-	roi = ROI_Assumption * ((technical_debt_value_limit - cur_td)/ (technical_debt_value_limit));
-
-	rdata[i] = {
-	    Year: i+initial_year,
-	    'Value Output': roi*current_value,
-	    'Technical Debt': cur_td,
-	    ROI: roi,
-	}
-	cur_td = (cur_td + current_paydown);
-        cur_td = cur_td * (1.0 + Technical_Debt_Interest);
-        /* we choose not to have a model in which technical debt can
-	    be negative. */
-        cur_td = Math.max(0,cur_td);
-    }
-
-    return rdata;
+ drawAmperageVisualization();
+ drawCoilHeatVisualization();
 }
-
-function createChart(data){
-    var countries = [];
-    var charts = [];
-    var maxDataPoint = 0;
-    
-    /* Loop through first row and get each country 
-       and push it into an array to use later */
-    for (var prop in data[0]) {
-	if (data[0].hasOwnProperty(prop)) {
-	    if (prop != 'Year') {
-		countries.push(prop);
-	    }
-	}
-    };
-
-    var countriesCount = countries.length;
-
-    var startYear = data[0]['Year'];
-    var endYear = data[data.length - 1]['Year'];
-    var chartHeight = height * (1 / countriesCount);
-
-    /* Let's make sure these are all numbers, 
-       we don't want javaScript thinking it's text 
-
-       Let's also figure out the maximum data point
-       We'll use this later to set the Y-Axis scale
-    */
-    data.forEach(function(d) {
-	for (var prop in d) {
-	if (d.hasOwnProperty(prop)) {
-		d[prop] = parseFloat(d[prop]);
-		if (d[prop] > maxDataPoint) {
-		    maxDataPoint = d[prop];
-		}
-	    }
-	}
-
-	// D3 needs a date object, let's convert it just one time
-	d.Year = new Date(d.Year,0,1);
-    });
-
-// Test: I don't really want the maxDataPoint to change in this application
-    maxDataPoint = 6000.0;
-
-    var mycolors = [ "rgb(34,135,141)", "rgb(188,57,58)",
-    "rgb(137,153,56)" ];
-
-    var maxScalePoints = [ 10000.0, 6000.0, 5.0 ];
-
-    for(var i = 0; i < countriesCount; i++){
-	charts.push(new Chart({
-	    data: data.slice(),
-	    id: i,
-	    name: countries[i],
-	    width: width,
-	    height: height * (1 / countriesCount),
-            color: mycolors[i],
-
-// This is pretty ugly way to handle the ROI, as an exception...
-// I've hacked this up so much this is really ugly.
-	    maxDataPoint: maxScalePoints[i],
-	    svg: svg,
-	    margin: margin,
-	    showBottomAxis: (i == countries.length - 1)
-	}));
-
-    }
-
-    function onBrush(){
-	/* this will return a date range to pass into the chart object */
-	var b = brush.empty() ? contextXScale.domain() : brush.extent();
-	for(var i = 0; i < countriesCount; i++){
-	    charts[i].showOnly(b);
-	}
-    }
-}
-
-function Chart(options){
-    this.chartData = options.data;
-    this.width = options.width;
-    this.height = options.height;
-    this.maxDataPoint = options.maxDataPoint;
-    this.svg = options.svg;
-    this.id = options.id;
-    this.name = options.name;
-    this.margin = options.margin;
-    this.showBottomAxis = options.showBottomAxis;
-
-    var localName = this.name;
-
-    /* XScale is time based */
-    this.xScale = d3.time.scale()
-	.range([0, this.width])
-	.domain(d3.extent(this.chartData.map(function(d) { return d.Year; })));
-
-    /* YScale is linear based on the maxData Point we found earlier */
-    this.yScale = d3.scale.linear()
-	.range([this.height,0])
-	.domain([0,this.maxDataPoint]);
-    var xS = this.xScale;
-    var yS = this.yScale;
-
-    /* 
-       This is what creates the chart.
-       There are a number of interpolation options. 
-       'basis' smooths it the most, however, when working with a lot of data, this will slow it down 
-    */
-    this.area = d3.svg.area()
-	.interpolate("basis")
-	.x(function(d) { return xS(d.Year); })
-	.y0(this.height)
-	.y1(function(d) { return yS(d[localName]); });
-
-    this.chartContainer = svg.append("g")
-	.attr('class',this.name.toLowerCase())
-		     
-	.attr("transform", "translate(" + this.margin.left + "," + (this.margin.top + (this.height * this.id) + (30 * this.id)) + ")");
-
-    /* We've created everything, let's actually add it to the page */
-    this.chartContainer.append("path")
-	.data([this.chartData])
-	.attr("class", "chart")
-	.attr("clip-path", "url(#clip-" + this.id + ")")
-        .style("fill",function(d) { return options.color;})
-        .style("fill-opacity",function(d) { return 0.7; })
-	.attr("d", this.area);
-
-    this.xAxisTop = d3.svg.axis().scale(this.xScale).orient("bottom");
-    this.xAxisBottom = d3.svg.axis().scale(this.xScale).orient("top");
-    /* We only want a top axis if it's the first country */
-/*    if(this.id == 0){
-	this.chartContainer.append("g")
-	    .attr("class", "x axis top")
-	    .attr("transform", "translate(0,0)")
-	    .call(this.xAxisTop);
-    }
-*/
-
-    /* Only want a bottom axis on the last country */
-//    if(this.showBottomAxis){
-/*
-	this.chartContainer.append("g")
-	    .attr("class", "x axis bottom")
-	    .attr("transform", "translate(0," + this.height + ")")
-	    .call(this.xAxisBottom);
-*/
-//    }  
-
-    this.yAxis = d3.svg.axis().scale(this.yScale).orient("left").ticks(5);
-
-    this.chartContainer.append("g")
-	.attr("class", "y axis")
-	.attr("transform", "translate(-15,0)")
-        .style("fill",function(d) { return this.color;})
-	.call(this.yAxis);
-
-    this.chartContainer.append("text")
-	.attr("class","country-title")
-	.attr("transform", "translate(15,40)")
-	.text(this.name);
-
-}
-
-Chart.prototype.showOnly = function(b){
-    this.xScale.domain(b);
-    this.chartContainer.select("path").data([this.chartData]).attr("d", this.area);
-    this.chartContainer.select(".x.axis.top").call(this.xAxisTop);
-    this.chartContainer.select(".x.axis.bottom").call(this.xAxisBottom);
-}
-
-createChart(RobsModelOfTechnicalDebt());
-
 </script>
 
+    <style>
+    </style>
+  </head>
+
+  <body onload="drawVisualization()">
+  <div class="container">
+
+      <div class="page-header">
+        <h1>Coil Choice: A model of electromagnetic coils</h1>
+        <p class="lead">Adjust, fiddle and understand.</p>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+    <span id="controls">
+    <p>
+      <label for="style"> Style:
+	<select id="style">
+	  <option value="bar-color">bar-color</option>
+	  <option value="surface">surface</option>
+	  <option value="dot-color">dot-color</option>
+	  <option value="dot-size">dot-size</option>
+	</select>
+      </label>
+    </p>
+    <p>
+      <table>
+	<tr>
+          <td>Voltage (V)</td>
+	  <td><input type="text" id="voltage" value="12"></td>
+	</tr>
+	<tr>
+          <td>Internal Resistance (Ohms) </td>
+	  <td><input type="text" id="internalresistance" value="0.025"></td>
+	</tr>
+	<tr>
+	  <td>Magnet Diameter (mm)</td>
+	  <td><input type="text" id="magnetdiameter" value="6.35"></td>
+	</tr>
+	<tr>
+	  <td>BobbinInnerDiameter (mm)</td>
+	  <td><input type="text" id="bobbininnerdiameter" value="12"></td>
+	</tr>
+	<tr>
+	  <td>BobbinLength (mm)</td>
+	  <td><input type="text" id="bobbinlength" value="12"></td>
+	</tr>
+	<tr>
+	  <td></td>
+	  <td><input type="button" value="Set" 
+		     onclick="drawVisualization();"></td>
+	</tr>
+      </table>
+    </p>
+</span>
+	</div>
+        <div class="col-md-6"><span id="coilheatlimitchart">
+</div>
+        <div class="col-md-6"> <span id="amperagelimitchart"></span></div>
+      </div>
+</div>
+
+      <div id="modelinfo">
+	<h2>A Basic Physical and Electrical Model</h2>
+	<p>
+	  Laws and assumptions
+	</p>
+	<p>
+	  Ohm's laws		V = IR
+	</p>
+	<p>
+	  MMF		F = NI
+	</p>
+	<p>						
+	  I assume wire packs as if it were efficiently packed in a squares containing the outer diamter of the wire.						
+	  I assume the effective force seen by a magnet of diameter is its
+	  percentage of the total area of the coil.
+	</p>
+	<p>						
+	  Windings 		W = Bobbin Length / Wire Diameter
+	</p>
+	<p>						  
+	  Turns/ Winding		T = (OD - ID) / Wire Diameter				
+	</p>
+	<p>						  
+	  Average Area of a turn		AA = (((OD - ID)/ 2) / 2)^2 * PI				
+	</p>
+	<p>						  
+	  Example data:	CNC Tech 32 gauge manet wire		http://media.digikey.com/pdf/Data%20Sheets/CNC%20Tech%20PDFs/MW35C_Spec.pdf			
+	  
+	  32	0.0005434		0.0249	
+	</p>
+	<p>						  
+	  Useful approximate battery resistances
+	  http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance
+	</p>
+      </div>
+
+
+    <div id="thanks">
+      <h2>Thanks</h2>
+        <p>
+      Thanks to Almende, B. V., for their open-source graphing software, <a href="http://visjs.org/">Vis.js</a>.
+       </p>
+
+       <p>
+      Here is an informative reference with a table of typical internal restistances:
+      <a href="http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance">
+http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance
+</a>
+       </p>
+    </div>
+
+
+  </body>
+
+
+
+
+
+
 </html>
+
+
