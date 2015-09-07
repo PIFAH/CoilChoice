@@ -79,10 +79,6 @@ function basic_options() {
     };
     this.keepAspectRatio = true;
     this.verticalRatio = 0.5;
-    this.animationInterval = 1000; // milliseconds
-    this.animationPreload = true;
-    this.animationAutoStart = true;
-    this.showAnimationControls = true
     this.tooltip = function(point) {
       var m = find_in_models(models, point.x, point.y);
       return renderAsHTML(m.model);
@@ -91,11 +87,15 @@ function basic_options() {
 
 function amperage_options_obj() {
     basic_options.call(this);
-    this.zLabel = "Effective MMF";
+    this.zLabel = "Amperage";
     this.zValueLabel = function(value) {
-      return value + ' Ampere-Turns';
+      return value + ' Amperes';
     };
     this.filterLabel = 'Maximum Ampere Limit: ';
+    this.animationInterval = 1000; // milliseconds
+    this.animationPreload = true;
+    this.animationAutoStart = true;
+    this.showAnimationControls = true
 }
 var amperage_options = new amperage_options_obj();
 
@@ -107,6 +107,11 @@ function coilheat_options_obj() {
     };
 
     this.filterLabel = 'Maximum Coil Wattage: ';
+    this.filterLabel = 'Maximum Ampere Limit: ';
+    this.animationInterval = 1000; // milliseconds
+    this.animationPreload = true;
+    this.animationAutoStart = true;
+    this.showAnimationControls = true
 }
 
 var coilheat_options = new coilheat_options_obj();
@@ -118,9 +123,10 @@ function mmf_options_obj() {
       return value + ' Ampere-Turns';
     };
     this.filterLabel = 'Maximum Ampere Limit: ';
+    this.animationAutoStart = false;
+    this.showAnimationControls = false;
 }
 var mmf_options = new mmf_options_obj();
-
 
 function mmf_value(t,computed) {
     return computed.EffectiveMMF;
@@ -128,7 +134,7 @@ function mmf_value(t,computed) {
 function amperage_value(t,computed) {
     var amp_limit = t * 2.0;
     return (computed.Amperage > amp_limit) ? -1.0 :
-       computed.EffectiveMMF;
+       computed.Amperage;
 }
 function coilheat_value(t,computed) {
    var heat_limit = t * 40;
@@ -180,6 +186,7 @@ function constructModel() {
                 model.Voltage = voltage;
                 model.InternalResistance = internal_resistance;
                 model.MagnetDiameter = magnetdiameter;
+        	 model.BobbinInnerDiameter = bobbin_inner_diameter;
                 model.BobbinOuterDiameter = model.BobbinInnerDiameter + y *
                     1.0;
                 model.AWG = awg;
