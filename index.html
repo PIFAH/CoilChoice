@@ -40,8 +40,9 @@
 <script type="text/javascript">
 var amperage_graph = null;
 var coilheat_graph = null;
-var amperage_models = [];
-var coilheat_models = [];
+
+var models = [];
+
 var amperage_data = null;
 var coilheat_data = null;
 
@@ -84,7 +85,7 @@ function basic_options() {
 
 var amperage_options = new basic_options();
 amperage_options.tooltip = function(point) {
-    var m = find_in_models(amperage_models, point.x, point.y);
+    var m = find_in_models(models, point.x, point.y);
     return renderAsHTML(m.model);
 };
 amperage_options.zLabel = "Effective MMF";
@@ -95,51 +96,15 @@ amperage_options.filterLabel = 'Maximum Ampere Limit: ';
 
 var coilheat_options = new basic_options();
 coilheat_options.tooltip = function(point) {
-    var m = find_in_models(coilheat_models, point.x, point.y);
+    var m = find_in_models(models, point.x, point.y);
     return renderAsHTML(m.model);
 };
-coilheat_options.zLabel = "Effective MMF",
-    coilheat_options.zValueLabel = function(value) {
+coilheat_options.zLabel = "Coil Heat",
+coilheat_options.zValueLabel = function(value) {
         return value + ' Watts';
-    };
+};
 coilheat_options.filterLabel = 'Maximum Coil Wattage: ';
 
-function traverseModel(f) {
-    var xsteps = 4; // number of datapoints will be steps*steps
-    var ysteps = 10; // number of datapoints will be steps*steps
-    var xaxisMax = 7;
-    var xaxisStep = 1;
-    var yaxisMax = 10;
-    var yaxisStep = yaxisMax / ysteps;
-    // This charting system takes x and y to be the physical
-    // spatial dimensions, we we have to map these into things that 
-    // make sense in our model, since we have vastly different scales...
-    // Effectively we need a model transducer....
-    // Our basic model is to vary x as wire guage, and y as bobbin diameter.
-    // t is a the animation parameter
-    var tMax = 50;
-    for (var t = 0; t < tMax; t++) {
-        for (var x = 0; x <= xaxisMax; x += xaxisStep) {
-            for (var y = 1; y <= yaxisMax; y += yaxisStep) {
-                // Now set up the model object....
-                var awg = AWG_indexes[x]; // AWG
-                var model = new CoilModel;
-                model.Voltage = voltage;
-                model.InternalResistance = internal_resistance;
-                model.MagnetDiameter = magnetdiameter;
-                model.BobbinOuterDiameter = model.BobbinInnerDiameter + y *
-                    1.0;
-                model.AWG = awg;
-                var computed = computeFromModel(model);
-                var amp_limit = t * 2.0;
-                var heat_limit = t * 40;
-		for(var i = 0; i < f.length; i++) {
-		    f[i](computed);
-                }
-            }
-        }
-    }
-}
 
 function amperage_value(t,computed) {
     var amp_limit = t * 2.0;
@@ -152,39 +117,14 @@ function coilheat_value(t,computed) {
                    computed.CoilHeat;
 }
 
-function visit_amperage(computed,data,models,x,y,t) {
-   var amp_value = amperage_value(t,computed);
+function visit_computed(f,computed,data,models,x,y,t) {
+   var value = f(t,computed);
     data.add({
                     x: x,
                     y: y,
-                    z: amp_value,
+                    z: value,
                     filter: t,
-                    style: amp_value,
-                    model: computed
-                });
-    models.push({
-                    x: x,
-                    y: y,
-                    z: amp_value,
-                    filter: t,
-                    model: computed
-                });
-}
-function visit_coilheat(computed,data,models,x,y,t) {
-   var heat_value = coilheat_value(t,computed);
-   data.add({
-                    x: x,
-                    y: y,
-                    z: heat_value,
-                    filter: t,
-                    style: heat_value,
-                    model: computed
-                });
-   models.push({
-                    x: x,
-                    y: y,
-                    z: heat_value,
-                    filter: t,
+                    style: value,
                     model: computed
                 });
 }
@@ -192,8 +132,7 @@ function visit_coilheat(computed,data,models,x,y,t) {
 function constructModel() {
     amperage_data = new vis.DataSet();
     coilheat_data = new vis.DataSet();
-    amperage_models = [];
-    coilheart_models = [];
+
     var xsteps = 4; // number of datapoints will be steps*steps
     var ysteps = 10; // number of datapoints will be steps*steps
     var xaxisMax = 7;
@@ -225,16 +164,21 @@ function constructModel() {
                     1.0;
                 model.AWG = awg;
                 var computed = computeFromModel(model);
-
-                visit_coilheat(computed,coilheat_data,coilheat_models,x,y,t);
-                visit_amperage(computed,amperage_data,amperage_models,x,y,t);
+		models.push({
+                    x: x,
+                    y: y,
+                    z: computed.EffectiveMMF,
+                    filter: t,
+                    model: computed
+                });
+                visit_computed(coilheat_value,computed,coilheat_data,models,x,y,t);
+                visit_computed(amperage_value,computed,amperage_data,models,x,y,t);
             }
         }
     }
 }
 
 function drawAmperageVisualization() {
-    constructModel();
     var camera = amperage_graph ? amperage_graph.getCameraPosition() : null;
     var container = document.getElementById('amperagelimitchart');
     amperage_graph = new vis.Graph3d(container, amperage_data,
@@ -243,7 +187,6 @@ function drawAmperageVisualization() {
 }
 
 function drawCoilHeatVisualization() {
-    constructModel();
     var camera = coilheat_graph ? coilheat_graph.getCameraPosition() : null;
     var container = document.getElementById('coilheatlimitchart');
     coilheat_graph = new vis.Graph3d(container, coilheat_data,
@@ -251,7 +194,8 @@ function drawCoilHeatVisualization() {
     if (camera) coilheat_graph.setCameraPosition(camera); // restore camera position
 }
 
-function drawVisualization() {
+function drawVisualizations() {
+    constructModel();
    drawAmperageVisualization();
    drawCoilHeatVisualization();
 } 
@@ -261,7 +205,7 @@ function drawVisualization() {
     </style>
   </head>
 
-  <body onload="drawVisualization()">
+  <body onload="drawVisualizations()">
   <div class="container">
 
       <div class="page-header">
@@ -297,7 +241,7 @@ function drawVisualization() {
 	<tr>
 	  <td></td>
 	  <td><input type="button" value="Set" 
-		     onclick="drawVisualization();"></td>
+		     onclick="drawVisualizations();"></td>
 	</tr>
       </table>
     </p>
