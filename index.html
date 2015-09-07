@@ -40,12 +40,16 @@
 <script type="text/javascript">
 var amperage_graph = null;
 var coilheat_graph = null;
+var mmf_graph = null;
 
 var models = [];
 
 var amperage_data = null;
 var coilheat_data = null;
+var mmf_data = null;
 
+// Note: This is really slow, but it doesn't seem to be a 
+// problem yet...it can obviously be replaced with a better approach
 function find_in_models(ms, x, y) {
     var result = null;
     var q = [];
@@ -77,35 +81,50 @@ function basic_options() {
     this.verticalRatio = 0.5;
     this.animationInterval = 1000; // milliseconds
     this.animationPreload = true;
-    // This may be annoying, but alerts the use to the fact 
-    // that it is an interactive model.
     this.animationAutoStart = true;
     this.showAnimationControls = true
+    this.tooltip = function(point) {
+      var m = find_in_models(models, point.x, point.y);
+      return renderAsHTML(m.model);
+    };
 };
 
-var amperage_options = new basic_options();
-amperage_options.tooltip = function(point) {
-    var m = find_in_models(models, point.x, point.y);
-    return renderAsHTML(m.model);
-};
-amperage_options.zLabel = "Effective MMF";
-amperage_options.zValueLabel = function(value) {
-    return value + ' Ampere-Turns';
-};
-amperage_options.filterLabel = 'Maximum Ampere Limit: ';
+function amperage_options_obj() {
+    basic_options.call(this);
+    this.zLabel = "Effective MMF";
+    this.zValueLabel = function(value) {
+      return value + ' Ampere-Turns';
+    };
+    this.filterLabel = 'Maximum Ampere Limit: ';
+}
+var amperage_options = new amperage_options_obj();
 
-var coilheat_options = new basic_options();
-coilheat_options.tooltip = function(point) {
-    var m = find_in_models(models, point.x, point.y);
-    return renderAsHTML(m.model);
-};
-coilheat_options.zLabel = "Coil Heat",
-coilheat_options.zValueLabel = function(value) {
+function coilheat_options_obj() {
+    basic_options.call(this);
+    this.zLabel = "Coil Heat",
+    this.zValueLabel = function(value) {
         return value + ' Watts';
-};
-coilheat_options.filterLabel = 'Maximum Coil Wattage: ';
+    };
+
+    this.filterLabel = 'Maximum Coil Wattage: ';
+}
+
+var coilheat_options = new coilheat_options_obj();
+
+function mmf_options_obj() {
+    basic_options.call(this);
+    this.zLabel = "Effective MMF";
+    this.zValueLabel = function(value) {
+      return value + ' Ampere-Turns';
+    };
+    this.filterLabel = 'Maximum Ampere Limit: ';
+}
+var mmf_options = new mmf_options_obj();
 
 
+function mmf_value(t,computed) {
+    return computed.EffectiveMMF;
+}
 function amperage_value(t,computed) {
     var amp_limit = t * 2.0;
     return (computed.Amperage > amp_limit) ? -1.0 :
@@ -132,6 +151,7 @@ function visit_computed(f,computed,data,models,x,y,t) {
 function constructModel() {
     amperage_data = new vis.DataSet();
     coilheat_data = new vis.DataSet();
+    mmf_data = new vis.DataSet();
 
     var xsteps = 4; // number of datapoints will be steps*steps
     var ysteps = 10; // number of datapoints will be steps*steps
@@ -173,6 +193,7 @@ function constructModel() {
                 });
                 visit_computed(coilheat_value,computed,coilheat_data,models,x,y,t);
                 visit_computed(amperage_value,computed,amperage_data,models,x,y,t);
+                visit_computed(mmf_value,computed,mmf_data,models,x,y,t);
             }
         }
     }
@@ -194,10 +215,19 @@ function drawCoilHeatVisualization() {
     if (camera) coilheat_graph.setCameraPosition(camera); // restore camera position
 }
 
+function drawMMFVisualization() {
+    var camera = mmf_graph ? mmf_graph.getCameraPosition() : null;
+    var container = document.getElementById('mmfchart');
+    mmf_graph = new vis.Graph3d(container, mmf_data,
+        mmf_options);
+    if (camera) mmf_graph.setCameraPosition(camera); // restore camera position
+}
+
 function drawVisualizations() {
     constructModel();
    drawAmperageVisualization();
    drawCoilHeatVisualization();
+   drawMMFVisualization();
 } 
 </script>
 
@@ -205,113 +235,116 @@ function drawVisualizations() {
     </style>
   </head>
 
-  <body onload="drawVisualizations()">
-  <div class="container">
+<body onload="drawVisualizations()">
+    <div class="container">
+        <div class="page-header">
+            <h1>Coil Choice: A model of electromagnetic coils</h1>
 
-      <div class="page-header">
-        <h1>Coil Choice: A model of electromagnetic coils</h1>
-        <p class="lead">Adjust, fiddle and understand.</p>
-      </div>
+            <p class="lead">Adjust, fiddle and understand.</p>
+        </div>
 
-      <div class="row">
-        <div class="col-md-12">
-    <span id="controls">
-    <p>
-      <table>
-	<tr>
-          <td>Voltage (V)</td>
-	  <td><input type="text" id="voltage" value="12"></td>
-	</tr>
-	<tr>
-          <td>Internal Resistance (Ohms) </td>
-	  <td><input type="text" id="internalresistance" value="0.025"></td>
-	</tr>
-	<tr>
-	  <td>Magnet Diameter (mm)</td>
-	  <td><input type="text" id="magnetdiameter" value="6.35"></td>
-	</tr>
-	<tr>
-	  <td>BobbinInnerDiameter (mm)</td>
-	  <td><input type="text" id="bobbininnerdiameter" value="12"></td>
-	</tr>
-	<tr>
-	  <td>BobbinLength (mm)</td>
-	  <td><input type="text" id="bobbinlength" value="12"></td>
-	</tr>
-	<tr>
-	  <td></td>
-	  <td><input type="button" value="Set" 
-		     onclick="drawVisualizations();"></td>
-	</tr>
-      </table>
-    </p>
-</span>
-	</div>
-        <div class="col-md-6"><span id="coilheatlimitchart">
-</div>
-        <div class="col-md-6"> <span id="amperagelimitchart"></span></div>
-      </div>
-</div>
+        <div class="row">
+            <div class="col-md-6">
+                <span id="controls">
+                <table>
+                    <tr>
+                        <td>Voltage (V)</td>
 
-      <div id="modelinfo">
-	<h2>A Basic Physical and Electrical Model</h2>
-	<p>
-	  Laws and assumptions
-	</p>
-	<p>
-	  Ohm's laws		V = IR
-	</p>
-	<p>
-	  MMF		F = NI
-	</p>
-	<p>						
-	  I assume wire packs as if it were efficiently packed in a squares containing the outer diamter of the wire.						
-	  I assume the effective force seen by a magnet of diameter is its
-	  percentage of the total area of the coil.
-	</p>
-	<p>						
-	  Windings 		W = Bobbin Length / Wire Diameter
-	</p>
-	<p>						  
-	  Turns/ Winding		T = (OD - ID) / Wire Diameter				
-	</p>
-	<p>						  
-	  Average Area of a turn		AA = (((OD - ID)/ 2) / 2)^2 * PI				
-	</p>
-	<p>						  
-	  Example data:	CNC Tech 32 gauge manet wire		http://media.digikey.com/pdf/Data%20Sheets/CNC%20Tech%20PDFs/MW35C_Spec.pdf			
-	  
-	  32	0.0005434		0.0249	
-	</p>
-	<p>						  
-	  Useful approximate battery resistances
-	  http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance
-	</p>
-      </div>
+                        <td><input id="voltage" type="text" value="12"></td>
+                    </tr>
 
+                    <tr>
+                        <td>Internal Resistance (Ohms)</td>
 
-    <div id="thanks">
-      <h2>Thanks</h2>
-        <p>
-      Thanks to Almende, B. V., for their open-source graphing software, <a href="http://visjs.org/">Vis.js</a>.
-       </p>
+                        <td><input id="internalresistance" type="text" value=
+                        "0.025"></td>
+                    </tr>
 
-       <p>
-      Here is an informative reference with a table of typical internal restistances:
-      <a href="http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance">
-http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance
-</a>
-       </p>
+                    <tr>
+                        <td>Magnet Diameter (mm)</td>
+
+                        <td><input id="magnetdiameter" type="text" value=
+                        "6.35"></td>
+                    </tr>
+
+                    <tr>
+                        <td>BobbinInnerDiameter (mm)</td>
+
+                        <td><input id="bobbininnerdiameter" type="text" value=
+                        "12"></td>
+                    </tr>
+
+                    <tr>
+                        <td>BobbinLength (mm)</td>
+
+                        <td><input id="bobbinlength" type="text" value=
+                        "12"></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+
+                        <td><input onclick="drawVisualizations();" type=
+                        "button" value="Set"></td>
+                    </tr>
+                </table>
+                </span>
+            </div>
+            <div class="col-md-6">
+                <span id="mmfchart"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span id=
+                "coilheatlimitchart"></span>
+            </div>
+
+            <div class="col-md-6">
+                <span id=
+                "amperagelimitchart"></span>
+            </div>
+        </div>
     </div>
 
+    <div id="modelinfo">
+        <h2>A Basic Physical and Electrical Model</h2>
 
-  </body>
+        <p>Laws and assumptions</p>
 
+        <p>Ohm's laws V = IR</p>
 
+        <p>MMF F = NI</p>
 
+        <p>I assume wire packs as if it were efficiently packed in a squares
+        containing the outer diamter of the wire. I assume the effective force
+        seen by a magnet of diameter is its percentage of the total area of the
+        coil.</p>
 
+        <p>Windings W = Bobbin Length / Wire Diameter</p>
 
+        <p>Turns/ Winding T = (OD - ID) / Wire Diameter</p>
 
+        <p>Average Area of a turn AA = (((OD - ID)/ 2) / 2)^2 * PI</p>
+
+        <p>Example data: CNC Tech 32 gauge manet wire
+        http://media.digikey.com/pdf/Data%20Sheets/CNC%20Tech%20PDFs/MW35C_Spec.pdf
+        32 0.0005434 0.0249</p>
+
+        <p>Useful approximate battery resistances
+        http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance</p>
+    </div>
+
+    <div id="thanks">
+        <h2>Thanks</h2>
+
+        <p>Thanks to Almende, B. V., for their open-source graphing software,
+        <a href="http://visjs.org/">Vis.js</a>.</p>
+
+        <p>Here is an informative reference with a table of typical internal
+        restistances: <a href=
+        "http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance">
+        http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance</a></p>
+    </div>
+</body>
 </html>
-
-
