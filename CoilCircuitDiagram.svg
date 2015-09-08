@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg2"
+   viewBox="0 0 791.99673 611.99988"
+   height="8.5in"
+   width="11in"
+   y="0in"
+   x="0in"
+   version="1.2">
+  <metadata
+     id="metadata171">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs169" />
+  <g
+     transform="matrix(6.0774789,0,0,6.2160541,591.83351,183.55738)"
+     id="g6">
+    <g
+       id="schematic">
+      <path
+         d="M 0.36,7.55001 A 3.6,3.60001 0 0 1 3.96,11.15"
+         class="other"
+         id="path9"
+         style="fill:none;stroke:#000000;stroke-width:0.72000003" />
+      <path
+         d="m 0.36,14.75 a 3.6,3.60001 0 0 0 3.6,-3.6"
+         class="other"
+         id="path11"
+         style="fill:none;stroke:#000000;stroke-width:0.72000003" />
+      <path
+         d="m 0.36,14.75 a 3.6,3.60001 0 0 1 3.6,3.6"
+         class="other"
+         id="path13"
+         style="fill:none;stroke:#000000;stroke-width:0.72000003" />
+      <path
+         d="m 0.36,21.95 a 3.6,3.60001 0 0 0 3.6,-3.6"
+         class="other"
+         id="path15"
+         style="fill:none;stroke:#000000;stroke-width:0.72000003" />
+      <path
+         d="m 0.36,21.95 a 3.6,3.60001 0 0 1 3.6,3.6001"
+         class="other"
+         id="path17"
+         style="fill:none;stroke:#000000;stroke-width:0.72000003" />
+      <path
+         d="m 0.36,29.1502 a 3.6,3.60001 0 0 0 3.6,-3.6001"
+         class="other"
+         id="path19"
+         style="fill:none;stroke:#000000;stroke-width:0.72000003" />
+      <path
+         d="m 0.36,29.1502 a 3.6,3.60001 0 0 1 3.6,3.6"
+         class="other"
+         id="path21"
+         style="fill:none;stroke:#000000;stroke-width:0.72000003" />
+      <path
+         d="m 0.36,36.3502 a 3.6,3.60001 0 0 0 3.6,-3.6"
+         class="other"
+         id="path23"
+         style="fill:none;stroke:#000000;stroke-width:0.72000003" />
+      <line
+         id="connector0pin"
+         connectorname="1"
+         y1="0.34999999"
+         y2="7.5500102"
+         class="pin"
+         x1="0.36000001"
+         x2="0.36000001"
+         style="stroke:#787878;stroke-width:0.69999897;stroke-linecap:round" />
+      <g
+         x="0.36"
+         y="0.35"
+         id="connector0terminal"
+         width="0.000283465"
+         class="terminal"
+         height="0.000283465"
+         style="fill:none;stroke:none;stroke-width:0" />
+      <line
+         id="connector1pin"
+         connectorname="2"
+         y1="43.550201"
+         y2="36.350201"
+         class="pin"
+         x1="0.36000001"
+         x2="0.36000001"
+         style="stroke:#787878;stroke-width:0.69999897;stroke-linecap:round" />
+      <g
+         x="0.36"
+         y="43.5502"
+         id="connector1terminal"
+         width="0.000283465"
+         class="terminal"
+         height="0.000283465"
+         style="fill:none;stroke:none;stroke-width:0" />
+    </g>
+  </g>
+  <g
+     transform="matrix(6.0774789,0,0,6.2160541,113.32181,95.412524)"
+     id="g49"
+     partID="61660">
+    <line
+       style="stroke:#000000;stroke-width:0.43200201;stroke-linecap:round"
+       id="line55"
+       x2="41.129929"
+       x1="40.049919"
+       class="other"
+       y2="11.6502"
+       y1="14.5302" />
+    <line
+       style="stroke:#000000;stroke-width:0.43200201;stroke-linecap:round"
+       id="line57"
+       x2="42.929901"
+       x1="41.129929"
+       class="other"
+       y2="17.4102"
+       y1="11.6502" />
+    <line
+       style="stroke:#000000;stroke-width:0.43200201;stroke-linecap:round"
+       id="line59"
+       x2="44.7299"
+       x1="42.929901"
+       class="other"
+       y2="11.6502"
+       y1="17.4102" />
+    <line
+       style="stroke:#000000;stroke-width:0.43200201;stroke-linecap:round"
+       id="line61"
+       x2="46.5299"
+       x1="44.7299"
+       class="other"
+       y2="17.4102"
+       y1="11.6502" />
+    <line
+       style="stroke:#000000;stroke-width:0.43200201;stroke-linecap:round"
+       id="line63"
+       x2="48.330002"
+       x1="46.5299"
+       class="other"
+       y2="11.6502"
+       y1="17.4102" />
+    <line
+       style="stroke:#000000;stroke-width:0.43200201;stroke-linecap:round"
+       id="line65"
+       x2="50.130001"
+       x1="48.330002"
+       class="other"
+       y2="17.4102"
+       y1="11.6502" />
+    <line
+       style="stroke:#000000;stroke-width:0.43200201;stroke-linecap:round"
+       id="line67"
+       x2="51.93"
+       x1="50.130001"
+       class="other"
+       y2="11.6502"
+       y1="17.4102" />
+    <line
+       style="stroke:#000000;stroke-width:0.43200201;stroke-linecap:round"
+       id="line69"
+       x2="53.73"
+       x1="51.93"
+       class="other"
+       y2="17.4102"
+       y1="11.6502" />
+    <line
+       style="stroke:#000000;stroke-width:0.43200201;stroke-linecap:round"
+       id="line71"
+       x2="54.450001"
+       x1="53.73"
+       class="other"
+       y2="14.5302"
+       y1="17.4102" />
+    <line
+       style="stroke:#787878;stroke-width:0.700001;stroke-linecap:round"
+       x2="54.450001"
+       x1="61.650101"
+       class="pin"
+       y2="14.5302"
+       y1="14.5302"
+       connectorname="2"
+       id="line73" />
+    <g
+       transform="translate(32.4999,11.4342)"
+       style="fill:none;stroke:none;stroke-width:0"
+       height="0.000283465"
+       class="terminal"
+       width="0.000283466"
+       id="g75"
+       y="3.096"
+       x="29.1502" />
+    <line
+       style="stroke:#787878;stroke-width:0.700001;stroke-linecap:round"
+       x2="40.049919"
+       x1="32.849899"
+       class="pin"
+       y2="14.5302"
+       y1="14.5302"
+       connectorname="1"
+       id="line79" />
+    <g
+       transform="translate(32.4999,11.4342)"
+       style="fill:none;stroke:none;stroke-width:0"
+       height="0.000283465"
+       class="terminal"
+       width="0.000283466"
+       id="g81"
+       y="3.096"
+       x="0.350001" />
+  </g>
+  <line
+     y1="271.17044"
+     y2="271.17044"
+     x1="245.87325"
+     x2="161.04936"
+     id="line91"
+     style="fill:none;stroke:#000000;stroke-width:4.35804272;stroke-linecap:round" />
+  <line
+     y1="292.66495"
+     y2="292.66495"
+     x1="217.60255"
+     x2="189.32399"
+     id="line93"
+     style="fill:none;stroke:#000000;stroke-width:4.35804272;stroke-linecap:round" />
+  <line
+     y1="314.1601"
+     y2="314.1601"
+     x1="245.87325"
+     x2="161.04936"
+     id="line95"
+     style="fill:none;stroke:#000000;stroke-width:4.35804272;stroke-linecap:round" />
+  <line
+     y1="335.65515"
+     y2="335.65515"
+     x1="217.60255"
+     x2="189.32399"
+     id="line97"
+     style="fill:none;stroke:#000000;stroke-width:4.35804272;stroke-linecap:round" />
+  <line
+     y1="249.67535"
+     y2="271.17044"
+     x1="203.46132"
+     x2="203.46132"
+     id="line99"
+     style="fill:none;stroke:#000000;stroke-width:3.63170242;stroke-linecap:round" />
+  <g
+     transform="matrix(0.43332893,0,0,0.6647353,16.427714,575.0465)"
+     x="11.25"
+     y="29.188"
+     id="g103"
+     width="0"
+     height="0"
+     style="fill:none" />
+  <g
+     transform="matrix(0.43332893,0,0,0.6647353,16.427714,575.0465)"
+     x="11.25"
+     y="0.388"
+     id="g111"
+     width="0"
+     height="0"
+     style="fill:none" />
+  <g
+     transform="matrix(4.9487566,0,0,-6.2160541,147.51206,276.05471)"
+     id="g125"
+     partID="854116670">
+    <line
+       style="stroke:#404040;stroke-width:0.69999802;stroke-linecap:round"
+       id="line127"
+       y2="14.5303"
+       x2="11.25"
+       y1="14.5303"
+       x1="32.849998" />
+  </g>
+  <g
+     transform="matrix(6.0774789,0,0,4.3761668,135.21462,121.49351)"
+     id="g129"
+     partID="854116760">
+    <line
+       style="stroke:#404040;stroke-width:0.69999802;stroke-linecap:round"
+       id="line131"
+       y2="28.9303"
+       x2="11.25"
+       y1="14.5303"
+       x1="11.25" />
+  </g>
+  <g
+     transform="matrix(6.0774789,0,0,12.441976,136.00892,-269.39912)"
+     id="g133"
+     partID="854116700">
+    <line
+       style="stroke:#404040;stroke-width:0.69999802;stroke-linecap:round"
+       id="line135"
+       y2="57.730301"
+       x2="11.25"
+       y1="50.5303"
+       x1="11.25" />
+  </g>
+  <g
+     transform="matrix(7.6575114,0,0,4.9515728,117.43834,168.4115)"
+     id="g137"
+     partID="854116730">
+    <line
+       style="stroke:#404040;stroke-width:0.69999802;stroke-linecap:round"
+       id="line139"
+       y2="57.730499"
+       x2="61.650002"
+       y1="57.730301"
+       x1="11.25" />
+  </g>
+  <g
+     transform="matrix(0.67596052,0,0,0.66091964,4.464326,555.34157)"
+     id="g147"
+     partID="61660" />
+  <g
+     partID="854116670"
+     id="g3590"
+     transform="matrix(4.7073117,0,0,-6.2160541,437.15247,276.05471)">
+    <line
+       x1="32.849998"
+       y1="14.5303"
+       x2="11.25"
+       y2="14.5303"
+       id="line3592"
+       style="stroke:#404040;stroke-width:0.69999802;stroke-linecap:round" />
+  </g>
+  <rect
+     y="86.241013"
+     x="114.39182"
+     height="410.81238"
+     width="425.9227"
+     id="rect3694"
+     style="fill:none;fill-rule:evenodd;stroke:#a2a2a2;stroke-width:8.02749443;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:8.02749498, 8.02749498;stroke-dashoffset:0;stroke-opacity:1" />
+  <text
+     id="text4496"
+     y="237.08842"
+     x="307.39407"
+     style="font-style:normal;font-weight:normal;font-size:13.99999733px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+     xml:space="preserve"><tspan
+       y="237.08842"
+       x="307.39407"
+       id="tspan4498" /></text>
+  <text
+     id="text4504"
+     y="225.96817"
+     x="366.17255"
+     style="font-style:normal;font-weight:normal;font-size:13.99999714px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     xml:space="preserve"><tspan
+       style="font-size:19.99999619px"
+       y="225.96817"
+       x="366.17255"
+       id="tspan4506">Internal</tspan><tspan
+       style="font-size:19.99999619px"
+       id="tspan4508"
+       y="243.46817"
+       x="366.17255">Resistance</tspan></text>
+  <text
+     id="text4510"
+     y="155.58621"
+     x="175.73663"
+     style="font-style:normal;font-weight:normal;font-size:19.99999619px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     xml:space="preserve"><tspan
+       y="155.58621"
+       x="175.73663"
+       id="tspan4512">Volts</tspan></text>
+  <flowRoot
+     transform="matrix(0.79999985,0,0,0.79999985,-14.668187,49.076783)"
+     style="font-style:normal;font-weight:normal;font-size:17.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     id="flowRoot4514"
+     xml:space="preserve"><flowRegion
+       id="flowRegion4516"><rect
+         y="219.90883"
+         x="822.10474"
+         height="36.736565"
+         width="52.622646"
+         id="rect4518" /></flowRegion><flowPara
+       style="font-size:25px"
+       id="flowPara4520">Coil</flowPara></flowRoot>  <flowRoot
+     style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:17.5px;line-height:125%;letter-spacing:0px;word-spacing:0px"
+     id="flowRoot4522"
+     xml:space="preserve"><flowRegion
+       id="flowRegion4524"><rect
+         y="276.50299"
+         x="457.71771"
+         height="28.793522"
+         width="106.23817"
+         id="rect4526" /></flowRegion><flowPara
+       id="flowPara4528"></flowPara></flowRoot>  <flowRoot
+     style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:17.5px;line-height:125%;letter-spacing:0px;word-spacing:0px"
+     id="flowRoot4538"
+     xml:space="preserve"><flowRegion
+       id="flowRegion4540"><rect
+         y="269.392"
+         x="826.67816"
+         height="44.624664"
+         width="189.71715"
+         id="rect4542" /></flowRegion><flowPara
+       id="flowPara4544"></flowPara></flowRoot>  <text
+     id="text4546"
+     y="360.9216"
+     x="633.30103"
+     style="font-style:normal;font-weight:normal;font-size:13.99999714px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     xml:space="preserve"><tspan
+       y="360.9216"
+       x="633.30103"
+       id="tspan4548"><tspan
+         id="tspan4552"
+         style="font-size:19.99999619px">Coil</tspan></tspan><tspan
+       id="tspan4574"
+       y="385.9216"
+       x="633.30103"><tspan
+         id="tspan4576"
+         style="font-size:19.99999619px">Resistance</tspan></tspan></text>
+  <text
+     id="text4562"
+     y="252.52657"
+     x="688.62469"
+     style="font-style:normal;font-weight:normal;font-size:13.99999714px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     xml:space="preserve"><tspan
+       y="252.52657"
+       x="688.62469"
+       id="tspan4564" /></text>
+  <flowRoot
+     style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:25px;line-height:125%;letter-spacing:0px;word-spacing:0px;"
+     id="flowRoot4566"
+     xml:space="preserve"><flowRegion
+       id="flowRegion4568"><rect
+         style="font-size:25px;"
+         y="428.65475"
+         x="827.11316"
+         height="43.365269"
+         width="100.83306"
+         id="rect4570" /></flowRegion><flowPara
+       id="flowPara4572"></flowPara></flowRoot>  <text
+     id="text4578"
+     y="54.104042"
+     x="130.30576"
+     style="font-style:normal;font-weight:normal;font-size:19.99999619px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     xml:space="preserve"><tspan
+       y="54.104042"
+       x="130.30576"
+       id="tspan4580">Battery or Power Supply</tspan></text>
+</svg>
