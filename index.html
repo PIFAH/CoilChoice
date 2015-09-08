@@ -246,9 +246,9 @@ function drawVisualizations() {
 <body onload="drawVisualizations()">
     <div class="container">
         <div class="page-header">
-            <h1>Coil Choice: A model of electromagnetic coils</h1>
+            <h1>Coil Choice: Design electromagnetic coils</h1>
 
-            <p class="lead">Adjust, fiddle and understand.</p>
+            <p class="lead">Brought to you by <a href="https://github.com/PIFAH/PIFAH">Public Invention For All Humanity (PIFAH)</a>.</p>
         </div>
 
         <div class="row">
@@ -257,43 +257,32 @@ function drawVisualizations() {
                 <table>
                     <tr>
                         <td>Voltage (V)</td>
-
                         <td><input id="voltage" type="text" value="12"></td>
                     </tr>
-
                     <tr>
                         <td>Internal Resistance (Ohms)</td>
-
                         <td><input id="internalresistance" type="text" value=
                         "0.025"></td>
                     </tr>
-
                     <tr>
                         <td>Magnet Diameter (mm)</td>
-
                         <td><input id="magnetdiameter" type="text" value=
                         "6.35"></td>
                     </tr>
-
                     <tr>
                         <td>BobbinInnerDiameter (mm)</td>
-
                         <td><input id="bobbininnerdiameter" type="text" value=
                         "12"></td>
                     </tr>
-
                     <tr>
                         <td>BobbinLength (mm)</td>
-
                         <td><input id="bobbinlength" type="text" value=
                         "12"></td>
                     </tr>
-
                     <tr>
                         <td></td>
-
                         <td><input onclick="drawVisualizations();" type=
-                        "button" value="Set"></td>
+                        "button" value="Apply parameters"></td>
                     </tr>
                 </table>
                 </span>
@@ -322,6 +311,29 @@ function drawVisualizations() {
             </div>
         </div>
     </div>
+
+<h2>How To Use This Page</h2>
+
+<h3>Motivation</h3>
+
+<h3>Power Supplies</h3>
+
+<h3>Amperage Limitation</h3>
+
+<h3>Heat Limiations</h3>
+
+<h3>Experiments</h3>
+
+<p>
+Increase the interanl resistance and observe that the eventually the optimum force is 
+generated with thinner wire.
+
+<p>
+Change the bobbin dimensions and observe that optimum wire gauge may change.
+
+<p>
+Use the animation limits to set the amperage limit imposed by other parts of your circuit.
+
 
     <div id="modelinfo">
         <h2>A Basic Physical and Electrical Model</h2>
@@ -363,6 +375,17 @@ function drawVisualizations() {
         http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance</a></p>
 
 	<p>The circuit diagram started out as a Fritzing diagram, which I then modified in Inkscape.</p>
+	<p>The bobbin diagram was made with Inkscape.</p>
     </div>
+
+<h2>Licensing, Contributing and Reusing</h2>
+
+CoilChoice is Free-libre Open Source Software, licensed under the GPL. 
+The <a href="https://github.com/PIFAH/CoilChoice">github repo</a> is a convenient way to reuse it.
+To report a bug or make a suggestion, open an <a href="https://github.com/PIFAH/CoilChoice/issues">issue</a> at the github repo.  Even better, create a pull request!
+
+You may prefer to use the <a href="https://github.com/PIFAH/CoilChoice/blob/gh-pages/Magnet%20Coil%20Analysis.ods">spreadsheet</a>, also present in Microsoft Excel format.
+
+
 </body>
 </html>
