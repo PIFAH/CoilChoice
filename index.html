@@ -84,7 +84,6 @@ function coilheat_options_obj() {
     };
 
     this.filterLabel = 'Maximum Coil Wattage: ';
-    this.filterLabel = 'Maximum Ampere Limit: ';
     this.animationInterval = 1000; // milliseconds
     this.animationPreload = true;
     this.animationAutoStart = true;
@@ -95,11 +94,11 @@ var coilheat_options = new coilheat_options_obj();
 
 function mmf_options_obj() {
     basic_options.call(this);
+    this.width = '900px';
     this.zLabel = "Effective MMF";
     this.zValueLabel = function(value) {
       return value + ' Ampere-Turns';
     };
-    this.filterLabel = 'Maximum Ampere Limit: ';
     this.animationAutoStart = false;
     this.showAnimationControls = false;
 }
@@ -253,7 +252,7 @@ function drawVisualizations() {
         </div>
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <span id="controls">
                 <table>
                     <tr>
@@ -299,8 +298,11 @@ function drawVisualizations() {
                 </table>
                 </span>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <img src="CoilCircuitDiagram.svg" alt="Coil Circuit Diagram" height="400" width="400">	      
+            </div>
+            <div class="col-md-4">
+                <img src="BobbinDiagram.Inkscape.svg" alt="Bobbin Diagram" height="400" width="400">	      
             </div>
         </div>
         <div class="row">
@@ -360,8 +362,7 @@ function drawVisualizations() {
         "http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance">
         http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance</a></p>
 
-	<p>Thanks <a href="https://artifartinsanity.wordpress.com/2013/01/07/svg-circuit-symbol-library/">"Arty, Farty, Insanity"</a>
- (Radagast?) for a free public domain SVG circuit library.
+	<p>The circuit diagram started out as a Fritzing diagram, which I then modified in Inkscape.</p>
     </div>
 </body>
 </html>
