@@ -38,29 +38,6 @@
 
  
 <script type="text/javascript">
-var amperage_graph = null;
-var coilheat_graph = null;
-var mmf_graph = null;
-
-var models = [];
-
-var amperage_data = null;
-var coilheat_data = null;
-var mmf_data = null;
-
-// Note: This is really slow, but it doesn't seem to be a 
-// problem yet...it can obviously be replaced with a better approach
-function find_in_models(ms, x, y) {
-    var result = null;
-    var q = [];
-    for (var i = 0; i < ms.length; i++) {
-        var d = ms[i];
-        if ((d.x == x) && (d.y == y)) {
-            result = d;
-        }
-    }
-    return result;
-}
 
 function basic_options() {
     this.width = '600px';
@@ -154,10 +131,51 @@ function visit_computed(f,computed,data,models,x,y,t) {
                 });
 }
 
+var all_graph_configs = [
+{
+  id: "mmfchart",
+  graph: null,
+  data: null,
+  options: mmf_options,
+  value: mmf_value
+},
+{
+  id: "amperagelimitchart",
+  graph: null,
+  data: null,
+  options: amperage_options,
+  value: amperage_value
+},
+{
+  id: "coilheatlimitchart",
+  graph: null,
+  data: null,
+  options: coilheat_options,
+  value: coilheat_value
+}
+];
+
+var models = [];
+
+// Note: This is really slow, but it doesn't seem to be a 
+// problem yet...it can obviously be replaced with a better approach
+function find_in_models(ms, x, y) {
+    var result = null;
+    var q = [];
+    for (var i = 0; i < ms.length; i++) {
+        var d = ms[i];
+        if ((d.x == x) && (d.y == y)) {
+            result = d;
+        }
+    }
+    return result;
+}
+
+
 function constructModel() {
-    amperage_data = new vis.DataSet();
-    coilheat_data = new vis.DataSet();
-    mmf_data = new vis.DataSet();
+    all_graph_configs.forEach(function(c) {
+		       c.data = new vis.DataSet(); 
+		       } );
 
     var xsteps = 4; // number of datapoints will be steps*steps
     var ysteps = 10; // number of datapoints will be steps*steps
@@ -198,43 +216,27 @@ function constructModel() {
                     filter: t,
                     model: computed
                 });
-                visit_computed(coilheat_value,computed,coilheat_data,models,x,y,t);
-                visit_computed(amperage_value,computed,amperage_data,models,x,y,t);
-                visit_computed(mmf_value,computed,mmf_data,models,x,y,t);
+		for(var i = 0; i < all_graph_configs.length; i++) {
+                    visit_computed(all_graph_configs[i].value,computed,all_graph_configs[i].data,models,x,y,t);
+                }
             }
         }
     }
 }
 
-function drawAmperageVisualization() {
-    var camera = amperage_graph ? amperage_graph.getCameraPosition() : null;
-    var container = document.getElementById('amperagelimitchart');
-    amperage_graph = new vis.Graph3d(container, amperage_data,
-        amperage_options);
-    if (camera) amperage_graph.setCameraPosition(camera); // restore camera position
-}
 
-function drawCoilHeatVisualization() {
-    var camera = coilheat_graph ? coilheat_graph.getCameraPosition() : null;
-    var container = document.getElementById('coilheatlimitchart');
-    coilheat_graph = new vis.Graph3d(container, coilheat_data,
-        coilheat_options);
-    if (camera) coilheat_graph.setCameraPosition(camera); // restore camera position
-}
-
-function drawMMFVisualization() {
-    var camera = mmf_graph ? mmf_graph.getCameraPosition() : null;
-    var container = document.getElementById('mmfchart');
-    mmf_graph = new vis.Graph3d(container, mmf_data,
-        mmf_options);
-    if (camera) mmf_graph.setCameraPosition(camera); // restore camera position
+// These could be improved by storing the animation state as well, if that is available to us.
+function drawVisualization(config) {
+    var camera = config.graph ? config.graph.getCameraPosition() : null;
+    var container = document.getElementById(config.id);
+    config.graph = new vis.Graph3d(container, config.data,
+        config.options);
+    if (camera) config.graph.setCameraPosition(camera); // restore camera position
 }
 
 function drawVisualizations() {
     constructModel();
-   drawAmperageVisualization();
-   drawCoilHeatVisualization();
-   drawMMFVisualization();
+    all_graph_configs.forEach(drawVisualization);
 } 
 </script>
 
