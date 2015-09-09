@@ -95,7 +95,7 @@ var coilheat_options = new coilheat_options_obj();
 function mmf_options_obj() {
     basic_options.call(this);
     this.width = '900px';
-    this.zLabel = "MMF";
+    this.zLabel = "Effective MMF";
     this.zValueLabel = function(value) {
       return value + ' Ampere-Turns';
     };
@@ -105,7 +105,7 @@ function mmf_options_obj() {
 var mmf_options = new mmf_options_obj();
 
 function mmf_value(t,computed) {
-    return computed.MMF_amp_turns;
+    return computed.EffectiveMMF;
 }
 function amperage_value(t,computed) {
     var amp_limit = t * 2.0;
@@ -264,71 +264,70 @@ function drawVisualizations() {
 <body onload="drawVisualizations()">
     <div class="container">
         <div class="page-header">
-            <h1>Coil Choice: Design electromagnetic coils</h1>
-
-            <p class="lead">Brought to you by <a href="https://github.com/PIFAH/PIFAH">Public Invention For All Humanity (PIFAH)</a>.</p>
+            <h1>Coil Choice</h1>
+            <p class="lead">Designing electromagnetic coils for magnetomotive force.</p>
+            ...brought to you by <a href="https://github.com/PIFAH/PIFAH">Public Invention For All Humanity (PIFAH)</a>.
         </div>
+
+<div class="well">An interactive, visual tool aimed at the hobbyist or maker for understanding engineering tradeoffs in design of coils for generating maximum effective magneto-motive force. Real-world physical and electronic constraints can be represented. </div>
 
         <div class="row">
             <div class="col-md-4">
-                <span id="controls">
-                <table>
-                    <tr>
-                        <td>Voltage (V)</td>
-                        <td><input id="voltage" type="text" value="12"></td>
-                    </tr>
-                    <tr>
-                        <td>Internal Resistance (Ohms)</td>
-                        <td><input id="internalresistance" type="text" value=
-                        "0.025"></td>
-                    </tr>
-                    <tr>
-                        <td>BobbinInnerDiameter (mm)</td>
-                        <td><input id="bobbininnerdiameter" type="text" value=
-                        "12"></td>
-                    </tr>
-                    <tr>
-                        <td>BobbinLength (mm)</td>
-                        <td><input id="bobbinlength" type="text" value=
-                        "12"></td>
-                    </tr>
-                    <tr>
-                        <td>Maximum Amperage For Animation</td>
-                        <td><input id="maxamperage" type="text" value=
-                        "12"></td>
-                    </tr>
-                    <tr>
-                        <td>Minimum AWG To Consider</td>
-                        <td><input id="minawg" type="text" value=
-                        "14"></td>
-                    </tr>
-                    <tr>
-                        <td>Maximum AWG To Consider</td>
-                        <td><input id="maxawg" type="text" value=
-                        "34"></td>
-                    </tr>
-                    <tr>
-                        <td>Maximum Bobbin Outer Diameter (mm)</td>
-                        <td><input id="maxouter" type="text" value=
-                        "12"></td>
-                    </tr>
-                    <tr>
-                        <td>Bobbin Size Step (mm)</td>
-                        <td><input id="bobbinstep" type="text" value=
-                        "1.0"></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input onclick="drawVisualizations();" type=
-                        "button" value="Apply parameters"></td>
-                    </tr>
-                </table>
-                </span>
+Model Parameters:
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">Voltage (v)</span>
+  <input type="text" id="voltage" class="form-control" aria-describedby="basic-addon1" value="12">
+</div>
+
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">Internal Resistance (Ohms)</span>
+  <input type="text" id="internalresistance" class="form-control" aria-describedby="basic-addon1" value="0.025">
+</div>
+
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">Bobbin Inner Diameter (mm)</span>
+  <input type="text" id="bobbininnerdiameter" class="form-control" aria-describedby="basic-addon1" value="12">
+</div>
+
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">Bobbin Length (mm)</span>
+  <input type="text" id="bobbinlength" class="form-control" aria-describedby="basic-addon1" value="12">
+</div>
+
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">Bobbin Length (mm)</span>
+  <input type="text" id="maxamperage" class="form-control" aria-describedby="basic-addon1" value="100">
+</div>
+
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">Minimum AWG</span>
+  <input type="text" id="minawg" class="form-control" aria-describedby="basic-addon1" value="10">
+</div>
+
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">Maximum AWG</span>
+  <input type="text" id="maxawg" class="form-control" aria-describedby="basic-addon1" value="46">
+</div>
+
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">Maximum Bobbin Outer Diameter (mm)</span>
+  <input type="text" id="maxouter" class="form-control" aria-describedby="basic-addon1" value="24">
+</div>
+
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">Bobbin Size Step (mm)</span>
+  <input type="text" id="bobbinstep" class="form-control" aria-describedby="basic-addon1" value="1">
+</div>
+<div class="btn-group" role="group" aria-label="Change Graphs">
+  <button type="button" class="btn btn-default">Apply Parameters</button>
+</div>
             </div>
             <div class="col-md-4">
+Electronic Circuit Model:
                 <img src="CoilCircuitDiagram.svg" alt="Coil Circuit Diagram" height="400" width="400">	      
             </div>
             <div class="col-md-4">
+Physical Bobbin Model:
                 <img src="BobbinDiagram.svg" alt="Bobbin Diagram" height="400" width="400">	      
             </div>
         </div>
@@ -336,20 +335,35 @@ function drawVisualizations() {
             <div class="col-md-2">
 	    </div>
             <div class="col-md-8">
+	      <div class="panel panel-default">
+		<div class="panel-body">
+		  Magneto-motive Force
                 <span id="mmfchart"></span>
+		</div>
+	      </div>
 	    </div>
             <div class="col-md-2">
 	    </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <span id=
-                "coilheatlimitchart"></span>
+	      <div class="panel panel-default">
+		<div class="panel-body">
+		  Coil Heat Limit Animation
+                <span id="coilheatlimitchart"></span>
+		</div>
+	      </div>
+
             </div>
 
             <div class="col-md-6">
-                <span id=
-                "amperagelimitchart"></span>
+	      <div class="panel panel-default">
+		<div class="panel-body">
+		  Amperage Limit Animation
+                <span id="amperagelimitchart"></span>
+		</div>
+	      </div>
+
             </div>
         </div>
         <div class="row">
@@ -358,11 +372,44 @@ function drawVisualizations() {
 
 <h3>Motivation</h3>
 
+<p>
+I needed to understand and design how to maximize the effective magnetoforce of a coil to push a magnet as a part of the <a href="http://pifah.github.io/Gluss-Pusher/">Gluss Pusher</a> project, and was unable to find a completely satisfactory tool that explained this subject to the constraints that a hobbyist typically faces.
+</p>
+
+<p>
+In general, the engineer or hobbyist must select wire and the geometry of bobbin subject to constraints and tradeoffs.  Drawing more current provides more force, but generates more heat. Making the coil thicker provides more turns, thus increasing the MMF, but increases the resistance. Making the coil draw more current will increase the MMF, but drain a battery far more quickly. This tool is meant to make these tradeoffs visible.
+</p>
+
+<h3>Effective MMF: An Approximation </h3>
+<p>
+In generally as a coil becomes larger not all of the magnetic flux or MMF goes where you want it.  In particular, if the coil outer diameter is much larger than the inner diameter, only a fraction of the MMF generated by the outermost wire will go into the hole in the bobbin.  I do not know how to model this precisely. A approximate it with the concept "Effective MMF".  I simply assume that the flux from any one turn of the coil is evenly distributed in its interior.  I therefore assume that the area of the circle that is the inside of the bobbin divided by the area of the turn is the "Effective MMF", a fraction of the total MMF.
+</p>
+
+<div class="alert alert-danger" role="alert">
+I am assuming that it is valid to treat the coil as if all the turns were the average diameter. I thus simply compute the square of the inner bobbin diameter and divide by the square of the average turn diameter.  I (or some intrepid reader) needs to do the small amount of calculus, or find in a book, a proof or disproof of this point.
+</div>
+
+<p>
+The large 3D chart on the top above renders the Effective MMF against the wire gauge and the outer diameter of the coil. By hovering over a particular element, the tooltip will show the total MMF as well as the Effective MMF.
+</p>
+
 <h3>Power Supplies</h3>
+<p>
+In practice, a power supply will be a battery or an amperage-limited power supply. Batteries have internal resistance, and it is impossible to correctly model them without modeling internal resistance. An amperage-limited power supply can probably neglect internal resistance of the circuit before the coil if it is close to the power supply, but must not energize a coil which draws too much power.
+</p>
 
 <h3>Amperage Limitation</h3>
+<p>
+The chart titled "Amperage Limit Animation" is valuable for seeing amperage limitations.  It cycles through the maximum amperage set in the parameter area. At any point in the animation, it drops to zero (represented as dark blue at the plain) any design choices which draw more power than a certain amperage, controlled by the animation, or the slider at the bottom.  By manipulating the slider and looking at the surface you can get an understanding of how design decisions approach an amperage limit.
+</p>
 
 <h3>Heat Limiations</h3>
+<p>
+Energizing a real, non-superconducting coil generates heat. If the heat is generated faster than it can be carried away, the temperature will rise. Eventualy the insulation on the wire will melt (or something may go wrong sooner, if you are using a plastic bobbin, for example.) We may hope eventually to improve this tool by adding a heat dissipation model.  Dr. Bryan Ruddy discusses such heat dissipation models in this <a href="http://hdl.handle.net/1721.1/78177">dissertation</a>, but I have not yet attempted to add those to the model.
+</p>
+<p>
+Until that time, the best we can do is to know how many watts are being generated as heat inside the coil.  The chart "Coil Heat Animation" is designed to allow this be visualized and understood. How will you relate a given wattage to the actual survivability of your coil?  I can only suggest that you try it and see when you smell smoke. Where your safety glasses whil performing this experiment, please.
+</p>
 
 <h3>Experiments</h3>
 
@@ -407,6 +454,13 @@ Use the animation limits to set the amperage limit imposed by other parts of you
 
     <div id="thanks">
         <h2>Thanks</h2>
+
+<p>
+	This tool perhaps makes interactive and visual the excellent work apparently by R. Clarke:
+	<a href="http://info.ee.surrey.ac.uk/Workshop/advice/coils/">http://info.ee.surrey.ac.uk/Workshop/advice/coils/</a>,
+        althouth that work focuses rather strongly on coils containing a core, and perhaps focused more on inductance than
+        the production of MMF.
+</p>
 
         <p>Thanks to Almende, B. V., for their open-source graphing software,
         <a href="http://visjs.org/">Vis.js</a>.</p>
