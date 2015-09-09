@@ -5,6 +5,13 @@ var AWG_data = [];
 
 // Note: This data is provisional based on a single manufacturer
 // http://media.digikey.com/pdf/Data%20Sheets/CNC%20Tech%20PDFs/MW35C_Spec.pdf
+
+AWG_data[36] = { OhmsPerMM: 1428 / 1000000,
+		 WireDiameter: 0.160 };
+
+AWG_data[34] = { OhmsPerMM: 890.6 / 1000000,
+		 WireDiameter: 0.198 };
+
 AWG_data[32] = { OhmsPerMM: 543.4 / 1000000,
 		 WireDiameter: 0.249 };
 
@@ -29,7 +36,13 @@ AWG_data[20] = { OhmsPerMM: 33.88 / 1000000,
 AWG_data[18] = { OhmsPerMM: 21.39 / 1000000,
 		 WireDiameter: 1.110 };
 
-var AWG_indexes = [ 18,20,22,24,26,28,30,32 ];
+AWG_data[16] = { OhmsPerMM: 13.44 / 1000000,
+		 WireDiameter: 1.384 };
+
+AWG_data[14] = { OhmsPerMM: 8.437 / 1000000,
+		 WireDiameter: 1.732 };
+
+var AWG_indexes = [ 14,16,18,20,22,24,26,28,30,32,34,36 ];
 
 function CoilModel() {
   // POWER SOURCE
