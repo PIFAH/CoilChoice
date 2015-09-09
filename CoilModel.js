@@ -68,7 +68,7 @@ function CoilModel() {
   // Bobbin parameters (all in mm)
   this.BobbinInnerDiameter = 12,
   this.BobbinOuterDiameter = 12.5,
-  this.BobbinLength = 12,
+  this.BobbinLength = 12
 }
 
 function computeFromModel(model) {

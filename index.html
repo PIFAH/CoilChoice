@@ -176,24 +176,43 @@ function constructModel() {
 		       c.data = new vis.DataSet(); 
 		       } );
 
-    var xsteps = 4; // number of datapoints will be steps*steps
-    var ysteps = 10; // number of datapoints will be steps*steps
-    var xaxisMax = 7;
+    var maxamperage = parseFloat($("#maxamperage").val());
+    var minawg = parseFloat($("#minawg").val());
+    var maxawg = parseFloat($("#maxawg").val());
+    var lAWG_indexes = [];
+    var lcnt = 0;
+    for(var i = 0; i <  AWG_indexes.length; i++) {
+	var v = AWG_indexes[i];
+	if ((v >= minawg) && (v <= maxawg)) {
+            lAWG_indexes[lcnt++] = v;
+        }
+    }
+    if (lAWG_indexes.length == 0) {
+        alert("Cowardly refusing not to compute against an empty set of Wire Gauges.");
+	return;
+    }
+
+
+    var maxouter = parseFloat($("#maxouter").val());
+    var bobbinstep = parseFloat($("#bobbinstep").val());
+
+    var xaxisMax = lAWG_indexes.length-1;
     var xaxisStep = 1;
-    var yaxisMax = 10;
-    var yaxisStep = yaxisMax / ysteps;
+    var yaxisMax = maxouter;
+    var yaxisStep = bobbinstep;
     // This charting system takes x and y to be the physical
     // spatial dimensions, we we have to map these into things that 
     // make sense in our model, since we have vastly different scales...
     // Effectively we need a model transducer....
     // Our basic model is to vary x as wire guage, and y as bobbin diameter.
     // t is a the animation parameter
-    var tMax = 50;
+    var tMax = maxamperage;
     var internal_resistance = parseFloat($("#internalresistance").val());
     var bobbin_inner_diameter = parseFloat($("#bobbininnerdiameter").val());
     var bobbin_length = parseFloat($("#bobbinlength").val());
     var voltage = parseFloat($("#voltage").val());
-    var magnetdiameter = parseFloat($("#magnetdiameter").val());
+// We might need to move t up by more than 1, if they enterred a huge amperage
+//
     for (var t = 0; t < tMax; t++) {
         for (var x = 0; x <= xaxisMax; x += xaxisStep) {
             for (var y = 1; y <= yaxisMax; y += yaxisStep) {
@@ -202,7 +221,6 @@ function constructModel() {
                 var model = new CoilModel;
                 model.Voltage = voltage;
                 model.InternalResistance = internal_resistance;
-                model.MagnetDiameter = magnetdiameter;
         	 model.BobbinInnerDiameter = bobbin_inner_diameter;
                 model.BobbinOuterDiameter = model.BobbinInnerDiameter + y *
                     1.0;
@@ -265,11 +283,6 @@ function drawVisualizations() {
                         "0.025"></td>
                     </tr>
                     <tr>
-                        <td>Magnet Diameter (mm)</td>
-                        <td><input id="magnetdiameter" type="text" value=
-                        "6.35"></td>
-                    </tr>
-                    <tr>
                         <td>BobbinInnerDiameter (mm)</td>
                         <td><input id="bobbininnerdiameter" type="text" value=
                         "12"></td>
@@ -278,6 +291,31 @@ function drawVisualizations() {
                         <td>BobbinLength (mm)</td>
                         <td><input id="bobbinlength" type="text" value=
                         "12"></td>
+                    </tr>
+                    <tr>
+                        <td>Maximum Amperage For Animation</td>
+                        <td><input id="maxamperage" type="text" value=
+                        "12"></td>
+                    </tr>
+                    <tr>
+                        <td>Minimum AWG To Consider</td>
+                        <td><input id="minawg" type="text" value=
+                        "14"></td>
+                    </tr>
+                    <tr>
+                        <td>Maximum AWG To Consider</td>
+                        <td><input id="maxawg" type="text" value=
+                        "34"></td>
+                    </tr>
+                    <tr>
+                        <td>Maximum Bobbin Outer Diameter (mm)</td>
+                        <td><input id="maxouter" type="text" value=
+                        "12"></td>
+                    </tr>
+                    <tr>
+                        <td>Bobbin Size Step (mm)</td>
+                        <td><input id="bobbinstep" type="text" value=
+                        "1.0"></td>
                     </tr>
                     <tr>
                         <td></td>
