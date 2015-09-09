@@ -222,6 +222,7 @@ function constructModel() {
                 model.Voltage = voltage;
                 model.InternalResistance = internal_resistance;
         	 model.BobbinInnerDiameter = bobbin_inner_diameter;
+        	 model.BobbinLength = bobbin_length;
                 model.BobbinOuterDiameter = model.BobbinInnerDiameter + y *
                     1.0;
                 model.AWG = awg;
@@ -295,7 +296,7 @@ Model Parameters:
 </div>
 
 <div class="input-group">
-  <span class="input-group-addon" id="basic-addon1">Bobbin Length (mm)</span>
+  <span class="input-group-addon" id="basic-addon1">Maximum Amperage</span>
   <input type="text" id="maxamperage" class="form-control" aria-describedby="basic-addon1" value="100">
 </div>
 
@@ -319,7 +320,7 @@ Model Parameters:
   <input type="text" id="bobbinstep" class="form-control" aria-describedby="basic-addon1" value="1">
 </div>
 <div class="btn-group" role="group" aria-label="Change Graphs">
-  <button type="button" class="btn btn-default">Apply Parameters</button>
+  <button type="button" class="btn btn-default" onclick="drawVisualizations();">Apply Parameters</button>
 </div>
             </div>
             <div class="col-md-4">
@@ -414,15 +415,22 @@ Until that time, the best we can do is to know how many watts are being generate
 <h3>Experiments</h3>
 
 <p>
-Increase the interanl resistance and observe that the eventually the optimum force is 
-generated with thinner wire.
+Like any modeling tool, CoilChoice starts to make more sense as you manipulate it and observe changes, checking those changes against your intuition and actual
+calculation and experimentation.  Here are some valuable experiments for developing an understanding of tradeoffs using the tool.
+</p>
 
-<p>
+<div class="well">
+Increase the internal resistance and observe that the eventually the maximum force is 
+generated with thinner wire. This is related to the fact that the maximum power pulled from a circuit with internal resitances occurs when the load matches the internal resistances. An internal resistance of 0.1 Ohms might correctly model an Alkaline battery. 0.025 Ohms might correctly model a Lithim-Ion Polymer battery. For fun, set the internal resistance to 2 Ohms, even though hopefully your battery will not have an internal resistance that high.
+</div>
+
+<div class="well">
 Change the bobbin dimensions and observe that optimum wire gauge may change.
+</div>
 
-<p>
-Use the animation limits to set the amperage limit imposed by other parts of your circuit.
-
+<div class="well">
+Choose an amperage limit.  Change the minimum and maximum wire guage and the Maximum amperage to make the charts match the design decisions that are relevant to your amperage limit.
+</div>
 
     <div id="modelinfo">
         <h2>A Basic Physical and Electrical Model</h2>
@@ -470,18 +478,30 @@ Use the animation limits to set the amperage limit imposed by other parts of you
         "http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance">
         http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance</a></p>
 
-	<p>The circuit diagram started out as a Fritzing diagram, which I then modified in Inkscape.</p>
+	<p>The circuit diagram started out as a <a href="http://fritzing.org/home/">Fritzing</a> diagram, which I then modified in <a href="https://inkscape.org/en/">Inkscape</a>.</p>
 	<p>The bobbin diagram was made with Inkscape.</p>
+
+	<p>This sofware was in fact written by Robert L. Read, although I hope others will join me in making a PIFAH a team effort.
     </div>
 
+<div class="well well-lg">
 <h2>Licensing, Contributing and Reusing</h2>
 
+<p>
 CoilChoice is Free-libre Open Source Software, licensed under the GPL. 
 The <a href="https://github.com/PIFAH/CoilChoice">github repo</a> is a convenient way to reuse it.
 To report a bug or make a suggestion, open an <a href="https://github.com/PIFAH/CoilChoice/issues">issue</a> at the github repo.  Even better, create a pull request!
+</p>
 
+<p>
 You may prefer to use the <a href="https://github.com/PIFAH/CoilChoice/blob/gh-pages/Magnet%20Coil%20Analysis.ods">spreadsheet</a>, also present in Microsoft Excel format.
+</p>
 
+
+<div>
+<img src="http://www.gnu.org/graphics/gplv3-127x51.png" alt="GPL 3.0 Logo"</img>
+</div>
+</div>
         </div>
     </div>
 </div>

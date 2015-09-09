@@ -6,6 +6,21 @@ var AWG_data = [];
 // Note: This data is provisional based on a single manufacturer
 // http://media.digikey.com/pdf/Data%20Sheets/CNC%20Tech%20PDFs/MW35C_Spec.pdf
 
+AWG_data[46] = { OhmsPerMM: 16122 / 1000000,
+		 WireDiameter: 0.0533 };
+
+AWG_data[44] = { OhmsPerMM: 9529 / 1000000,
+		 WireDiameter: 0.069 };
+
+AWG_data[42] = { OhmsPerMM: 5900 / 1000000,
+		 WireDiameter: 0.081 };
+
+AWG_data[40] = { OhmsPerMM: 3801 / 1000000,
+		 WireDiameter: 0.101 };
+
+AWG_data[38] = { OhmsPerMM: 1428 / 1000000,
+		 WireDiameter: 0.160 };
+
 AWG_data[36] = { OhmsPerMM: 1428 / 1000000,
 		 WireDiameter: 0.160 };
 
@@ -42,7 +57,13 @@ AWG_data[16] = { OhmsPerMM: 13.44 / 1000000,
 AWG_data[14] = { OhmsPerMM: 8.437 / 1000000,
 		 WireDiameter: 1.732 };
 
-var AWG_indexes = [ 14,16,18,20,22,24,26,28,30,32,34,36 ];
+AWG_data[12] = { OhmsPerMM: 5.316 / 1000000,
+		 WireDiameter: 2.163 };
+
+AWG_data[10] = { OhmsPerMM: 3.342 / 1000000,
+		 WireDiameter: 2.703 };
+
+var AWG_indexes = [ 10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46 ];
 
 function CoilModel() {
   // POWER SOURCE
@@ -87,6 +108,7 @@ function computeFromModel(model) {
   var InternalHeat = VoltageDropInBattery * Amperage;
   var CoilHeat = VoltageDropInCoil * Amperage;
   var MMF_amp_turns = Turns * Amperage;
+  var EffectiveMMF = MMF_amp_turns*(Math.pow(model.BobbinInnerDiameter,2)/Math.pow(AverageTurnDiameter,2));
 
   return {
     Model: model,
@@ -104,6 +126,7 @@ function computeFromModel(model) {
     InternalHeat : InternalHeat,
     CoilHeat : CoilHeat,
     MMF_amp_turns : MMF_amp_turns,
+    EffectiveMMF : EffectiveMMF,
   }
 }
 
@@ -117,6 +140,15 @@ function renderAsHTML(m) {
     result += "</td>\n";
     result += "<td>\n";
     result += m.MMF_amp_turns.toFixed(2);
+    result += "</td>\n";
+    result += "</tr>\n";
+
+    result += "<tr>\n";
+    result += "<td>\n";
+    result += "Effective MMF : ";
+    result += "</td>\n";
+    result += "<td>\n";
+    result += m.EffectiveMMF.toFixed(2);
     result += "</td>\n";
     result += "</tr>\n";
 
@@ -149,7 +181,7 @@ function renderAsHTML(m) {
 
     result += "<tr>\n";
     result += "<td>\n";
-    result += "Bobbin Outer Diameter (mm) ";
+    result += "Bobbin Outer Diameter (mm): ";
     result += "</td>\n";
     result += "<td>\n";
     result += " "+m.Model.BobbinOuterDiameter.toFixed(2);
