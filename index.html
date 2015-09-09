@@ -95,7 +95,7 @@ var coilheat_options = new coilheat_options_obj();
 function mmf_options_obj() {
     basic_options.call(this);
     this.width = '900px';
-    this.zLabel = "Effective MMF";
+    this.zLabel = "MMF";
     this.zValueLabel = function(value) {
       return value + ' Ampere-Turns';
     };
@@ -105,7 +105,7 @@ function mmf_options_obj() {
 var mmf_options = new mmf_options_obj();
 
 function mmf_value(t,computed) {
-    return computed.EffectiveMMF;
+    return computed.MMF_amp_turns;
 }
 function amperage_value(t,computed) {
     var amp_limit = t * 2.0;
@@ -211,7 +211,7 @@ function constructModel() {
 		models.push({
                     x: x,
                     y: y,
-                    z: computed.EffectiveMMF,
+                    z: computed.MMF_amp_turns,
                     filter: t,
                     model: computed
                 });
@@ -295,8 +295,12 @@ function drawVisualizations() {
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-2">
+	    </div>
+            <div class="col-md-8">
                 <span id="mmfchart"></span>
+	    </div>
+            <div class="col-md-2">
 	    </div>
         </div>
         <div class="row">
@@ -310,8 +314,8 @@ function drawVisualizations() {
                 "amperagelimitchart"></span>
             </div>
         </div>
-    </div>
-
+        <div class="row">
+        <div class="col-md-12">
 <h2>How To Use This Page</h2>
 
 <h3>Motivation</h3>
@@ -386,6 +390,9 @@ To report a bug or make a suggestion, open an <a href="https://github.com/PIFAH/
 
 You may prefer to use the <a href="https://github.com/PIFAH/CoilChoice/blob/gh-pages/Magnet%20Coil%20Analysis.ods">spreadsheet</a>, also present in Microsoft Excel format.
 
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

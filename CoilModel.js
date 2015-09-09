@@ -56,9 +56,6 @@ function CoilModel() {
   this.BobbinInnerDiameter = 12,
   this.BobbinOuterDiameter = 12.5,
   this.BobbinLength = 12,
-  // MAGNET
-  // Diameter (in mm)
-  this.MagnetDiameter = 6.35
 }
 
 function computeFromModel(model) {
@@ -77,7 +74,6 @@ function computeFromModel(model) {
   var InternalHeat = VoltageDropInBattery * Amperage;
   var CoilHeat = VoltageDropInCoil * Amperage;
   var MMF_amp_turns = Turns * Amperage;
-  var EffectiveMMF = MMF_amp_turns * (Math.pow(model.MagnetDiameter,2) / Math.pow(AverageTurnDiameter,2));
 
   return {
     Model: model,
@@ -95,7 +91,6 @@ function computeFromModel(model) {
     InternalHeat : InternalHeat,
     CoilHeat : CoilHeat,
     MMF_amp_turns : MMF_amp_turns,
-    EffectiveMMF : EffectiveMMF
   }
 }
 
@@ -105,10 +100,10 @@ function renderAsHTML(m) {
 
     result += "<tr>\n";
     result += "<td>\n";
-    result += "Effective MMF (Ampere Turns) : ";
+    result += "MMF (Ampere Turns) : ";
     result += "</td>\n";
     result += "<td>\n";
-    result += m.EffectiveMMF.toFixed(2);
+    result += m.MMF_amp_turns.toFixed(2);
     result += "</td>\n";
     result += "</tr>\n";
 
