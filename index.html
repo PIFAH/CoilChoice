@@ -39,6 +39,8 @@
  
 <script type="text/javascript">
 
+
+
 function basic_options() {
     this.width = '600px';
     this.height = '600px';
@@ -104,22 +106,23 @@ function mmf_options_obj() {
 }
 var mmf_options = new mmf_options_obj();
 
-function mmf_value(t,computed) {
+function mmf_value(limits,t,computed) {
     return computed.EffectiveMMF;
 }
-function amperage_value(t,computed) {
-    var amp_limit = t * 2.0;
+function amperage_value(limits,t,computed) {
+    var amp_limit = (t / 20.0) * limits.maxamperage;
     return (computed.Amperage > amp_limit) ? -1.0 :
        computed.Amperage;
 }
-function coilheat_value(t,computed) {
-   var heat_limit = t * 40;
+function coilheat_value(limits,t,computed) {
+   var heat_limit = (t / 20.0) * limits.maxwattage;
    return (computed.CoilHeat > heat_limit) ? -1.0 :
                    computed.CoilHeat;
 }
 
-function visit_computed(f,computed,data,models,x,y,t) {
-   var value = f(t,computed);
+// This function should be dissolved, I think...
+function visit_computed(limits,f,computed,data,models,x,y,t) {
+   var value = f(limits,t,computed);
     data.add({
                     x: x,
                     y: y,
@@ -177,6 +180,13 @@ function constructModel() {
 		       } );
 
     var maxamperage = parseFloat($("#maxamperage").val());
+    var maxwattage = parseFloat($("#maxwattage").val());
+
+    var limits = { 				   
+        maxamperage : maxamperage,
+        maxwattage : maxwattage
+    };
+
     var minawg = parseFloat($("#minawg").val());
     var maxawg = parseFloat($("#maxawg").val());
     var lAWG_indexes = [];
@@ -206,7 +216,7 @@ function constructModel() {
     // Effectively we need a model transducer....
     // Our basic model is to vary x as wire guage, and y as bobbin diameter.
     // t is a the animation parameter
-    var tMax = maxamperage;
+    var tMax = 20;
     var internal_resistance = parseFloat($("#internalresistance").val());
     if (internal_resistance < 0.001) {
 	alert("Oh Snap! We are uncertain of our math when Internal Resistance is less than 0.001 Ohms.");
@@ -239,7 +249,7 @@ function constructModel() {
                     model: computed
                 });
 		for(var i = 0; i < all_graph_configs.length; i++) {
-                    visit_computed(all_graph_configs[i].value,computed,all_graph_configs[i].data,models,x,y,t);
+                    visit_computed(limits,all_graph_configs[i].value,computed,all_graph_configs[i].data,models,x,y,t);
                 }
             }
         }
@@ -302,6 +312,11 @@ Model Parameters:
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1">Maximum Amperage</span>
   <input type="text" id="maxamperage" class="form-control" aria-describedby="basic-addon1" value="100">
+</div>
+
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">Maximum Wattage</span>
+  <input type="text" id="maxwattage" class="form-control" aria-describedby="basic-addon1" value="100">
 </div>
 
 <div class="input-group">
@@ -553,11 +568,7 @@ To report a bug or make a suggestion, open an <a href="https://github.com/PIFAH/
 You may prefer to use the <a href="https://github.com/PIFAH/CoilChoice/blob/gh-pages/Magnet%20Coil%20Analysis.ods">spreadsheet</a>, also present in Microsoft Excel format.
 </p>
 
-<p>To submit a bug or enhancement request, enter an
- <a href="https://github.com/PIFAH/CoilChoice/issues>issue</a>.
-</p>
-
-<p>This sofware was in fact written by <a href="mailto:read.robert@gmail.com">Robert L. Read</a>, although I hope others will join me in making a <a href="https://github.com/PIFAH/PIFAH">PIFAH</a> a team effort. Email Rob for questions or comments.
+<p>This sofware was in fact written by <a href="mailto:read.robert@gmail.com">Robert L. Read &lt;read.robert@gmail.com&gt;</a>, although I hope others will join me in making a <a href="https://github.com/PIFAH/PIFAH">PIFAH</a> a team effort. Email me for questions or comments.
 </p>
 
 <div>
