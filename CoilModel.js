@@ -111,22 +111,46 @@ function CoilModel() {
 }
 
 function computeFromModel(model) {
+  // Windings are computed from radius, not diameter...
+  // We assume the number of windings (vertical layers from the bobbin's rotational axis)
+  //  as if the Wire packed like squares..
+  var Windings = (model.BobbinOuterDiameter/2.0 - model.BobbinInnerDiameter/2.0) / model.WireDiameter();
 
-  var Windings = (model.BobbinOuterDiameter - model.BobbinInnerDiameter) / model.WireDiameter();
+  // The number of turns in a winding is just length divided by WireDiameter...
   var TurnsPerWinding = model.BobbinLength / model.WireDiameter();
+
+  // Total Turns is what drives MMF...
   var Turns = Windings * TurnsPerWinding;
+
+  // I am not entirely sure of this...
   var AverageTurnDiameter = (model.BobbinOuterDiameter + model.BobbinInnerDiameter) / 2.0;
+
+  // We need to know AverageTurnLength to compute resistance...
   var AverageTurnLength = AverageTurnDiameter * Math.PI;
+
+  // Resistance is a function of total wire length...
   var WireLengthIn_mm = Turns * AverageTurnLength;
   var CoilResistance = WireLengthIn_mm * model.OhmsPerMM();
+
+  // Total Resistance includes InternalResistance outside of the coil...
   var TotalResistance = model.InternalResistance + CoilResistance;
+
+  // Ohm's law V = I * R...
   var Amperage = model.Voltage / TotalResistance ;
+
+  // To compute heat we need to know the voltage drop in the coil specifically
   var VoltageDropInCoil = model.Voltage * (CoilResistance / TotalResistance);
   var VoltageDropInBattery = model.Voltage - VoltageDropInCoil;
+
+  // Currently not reporint InternalHeat but it could be important
   var InternalHeat = VoltageDropInBattery * Amperage;
   var CoilHeat = VoltageDropInCoil * Amperage;
+
+  // MMF is straightforward...
   var MMF_amp_turns = Turns * Amperage;
-  var EffectiveMMF = MMF_amp_turns*(Math.pow(model.BobbinInnerDiameter,2)/Math.pow(AverageTurnDiameter,2));
+
+  // This is debatable...
+  var EffectiveMMF = MMF_amp_turns*(Math.pow(model.BobbinInnerDiameter/AverageTurnDiameter,2));
 
   return {
     Model: model,
@@ -196,6 +220,16 @@ function renderAsHTML(m) {
     result += " "+m.Model.AWG;
     result += "</td>\n";
     result += "</tr>\n";
+
+    result += "<tr>\n";
+    result += "<td>\n";
+    result += "Turns: ";
+    result += "</td>\n";
+    result += "<td>\n";
+    result += " "+m.Turns.toFixed(2);
+    result += "</td>\n";
+    result += "</tr>\n";
+
 
     result += "<tr>\n";
     result += "<td>\n";
