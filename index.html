@@ -70,7 +70,7 @@ function amperage_options_obj() {
     this.zValueLabel = function(value) {
       return value + ' Amperes';
     };
-    this.filterLabel = 'Maximum Ampere Limit: ';
+    this.filterLabel = 'Twentieths of maximum Amperage: ';
     this.animationInterval = 1000; // milliseconds
     this.animationPreload = true;
     this.animationAutoStart = true;
@@ -85,7 +85,7 @@ function coilheat_options_obj() {
         return value + ' Watts';
     };
 
-    this.filterLabel = 'Maximum Coil Wattage: ';
+    this.filterLabel = 'Twentieths of maximum Coil Wattage:';
     this.animationInterval = 1000; // milliseconds
     this.animationPreload = true;
     this.animationAutoStart = true;
@@ -288,7 +288,10 @@ function drawVisualizations() {
 
         <div class="row">
             <div class="col-md-4">
-Model Parameters:
+<p>
+Electric Parameters:
+</p>
+<p>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1">Voltage (v)</span>
   <input type="text" id="voltage" class="form-control" aria-describedby="basic-addon1" value="12">
@@ -298,7 +301,11 @@ Model Parameters:
   <span class="input-group-addon" id="basic-addon1">Internal Resistance (Ohms)</span>
   <input type="text" id="internalresistance" class="form-control" aria-describedby="basic-addon1" value="0.025">
 </div>
-
+</p>
+<p>
+Physical Parameters:
+</p>
+<p>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1">Bobbin Inner Diameter (mm)</span>
   <input type="text" id="bobbininnerdiameter" class="form-control" aria-describedby="basic-addon1" value="12">
@@ -308,15 +315,19 @@ Model Parameters:
   <span class="input-group-addon" id="basic-addon1">Bobbin Length (mm)</span>
   <input type="text" id="bobbinlength" class="form-control" aria-describedby="basic-addon1" value="12">
 </div>
-
+</p>
+<p>
+User Interface Controls:
+</p>
+<p>
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1">Maximum Amperage</span>
-  <input type="text" id="maxamperage" class="form-control" aria-describedby="basic-addon1" value="100">
+  <input type="text" id="maxamperage" class="form-control" aria-describedby="basic-addon1" value="300">
 </div>
 
 <div class="input-group">
   <span class="input-group-addon" id="basic-addon1">Maximum Wattage</span>
-  <input type="text" id="maxwattage" class="form-control" aria-describedby="basic-addon1" value="100">
+  <input type="text" id="maxwattage" class="form-control" aria-describedby="basic-addon1" value="1000">
 </div>
 
 <div class="input-group">
@@ -338,6 +349,7 @@ Model Parameters:
   <span class="input-group-addon" id="basic-addon1">Bobbin Size Step (mm)</span>
   <input type="text" id="bobbinstep" class="form-control" aria-describedby="basic-addon1" value="1">
 </div>
+</p>
 <div class="btn-group" role="group" aria-label="Change Graphs">
   <button type="button" class="btn btn-default" onclick="drawVisualizations();">Apply Parameters</button>
 </div>
@@ -550,7 +562,7 @@ Here is the Javascript from <a href="https://github.com/PIFAH/CoilChoice/blob/gh
 	<p>The circuit diagram started out as a <a href="http://fritzing.org/home/">Fritzing</a> diagram, which I then modified in <a href="https://inkscape.org/en/">Inkscape</a>.</p>
 	<p>The bobbin diagram was made with Inkscape.</p>
 
-
+<p>This page looks better because of <a href="http://getbootstrap.com/">Bootstrap</a> than it would without it.</p>
 
 
     </div>
