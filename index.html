@@ -39,7 +39,10 @@
  
 <script type="text/javascript">
 
+// This has to be global, sadly,
+// unless we want to change the label function each time we create it.
 
+var lAWG_indexes = [];
 
 function basic_options() {
     this.width = '600px';
@@ -51,7 +54,7 @@ function basic_options() {
     this.xLabel = "AWG";
     this.yLabel = "Coil Width";
     this.xValueLabel = function(value) {
-        return AWG_indexes[value];
+        return lAWG_indexes[value];
     };
     this.yValueLabel = function(value) {
         return value + 'mm';
@@ -189,7 +192,8 @@ function constructModel() {
 
     var minawg = parseFloat($("#minawg").val());
     var maxawg = parseFloat($("#maxawg").val());
-    var lAWG_indexes = [];
+// This has to be a global variable for us to reach it from the labelling function, sadly.
+    lAWG_indexes = [];
     var lcnt = 0;
     for(var i = 0; i <  AWG_indexes.length; i++) {
 	var v = AWG_indexes[i];
@@ -231,7 +235,7 @@ function constructModel() {
         for (var x = 0; x <= xaxisMax; x += xaxisStep) {
             for (var y = 1; y <= yaxisMax; y += yaxisStep) {
                 // Now set up the model object....
-                var awg = AWG_indexes[x]; // AWG
+                var awg = lAWG_indexes[x]; // AWG
                 var model = new CoilModel;
                 model.Voltage = voltage;
                 model.InternalResistance = internal_resistance;
