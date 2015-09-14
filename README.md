@@ -1,6 +1,6 @@
 # CoilChoice
 
-This a D3 implemnted visualization tool for choosing and understanding tradeoffs in designing electromagnetic coils to produce magnetic motive force. Try the [CoilChoice](http://pifah.github.io/CoilChoice/) Tool.
+This is a visualization tool for choosing and understanding tradeoffs in designing electromagnetic coils to produce magnetic motive force. Try the [CoilChoice](http://pifah.github.io/CoilChoice/) Tool.
 
 It is part of the [Gluss Pusher](http://pifah.github.io/Gluss-Pusher/) project.
 
