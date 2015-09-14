@@ -5,3 +5,5 @@ This is a visualization tool for choosing and understanding tradeoffs in designi
 It is part of the [Gluss Pusher](http://pifah.github.io/Gluss-Pusher/) project.
 
 As all PIFAH projects, it is freely resuable. All documentation is licensed under Creative Commons Share Alike and all code under the GPL.
+
+As far as I am concerned, this is done until such time as someone suggests some changes.
